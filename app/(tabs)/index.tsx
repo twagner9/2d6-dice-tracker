@@ -1,22 +1,21 @@
-import RollTracker from "@/app/components/RollTracker";
-import { StyleSheet, View } from "react-native";
+import RollTrackerList from "@/app/components/RollTrackerList";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
+  const [totalRolls, setTotalRolls] = useState<number>(0);
+
+  const updateTotalRolls = (operation: string) => {
+    if (operation === "inc") setTotalRolls(totalRolls + 1);
+    else if (operation === "dec") setTotalRolls(Math.max(totalRolls - 1, 0));
+  };
   return (
     <View style={styles.container}>
-      <View style={styles.diceTrackerContainer}>
-        <RollTracker diceValue={2}></RollTracker>
-        <RollTracker diceValue={3}></RollTracker>
-        <RollTracker diceValue={4}></RollTracker>
-        <RollTracker diceValue={5}></RollTracker>
-        <RollTracker diceValue={6}></RollTracker>
-        <RollTracker diceValue={7}></RollTracker>
-        <RollTracker diceValue={8}></RollTracker>
-        <RollTracker diceValue={9}></RollTracker>
-        <RollTracker diceValue={10}></RollTracker>
-        <RollTracker diceValue={11}></RollTracker>
-        <RollTracker diceValue={12}></RollTracker>
-      </View>
+      <RollTrackerList
+        totalDiceRolls={totalRolls}
+        updateTotalRollsState={updateTotalRolls}
+      />
+      <Text style={[{ color: "#fff", fontSize: 40 }]}>{"test"}</Text>
     </View>
   );
 }
@@ -24,6 +23,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "row",
     backgroundColor: "#25292e",
     textAlign: "center",
     justifyContent: "center",

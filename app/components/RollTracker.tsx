@@ -4,17 +4,29 @@ import { StyleSheet, Text, View } from "react-native";
 
 type Props = {
   diceValue: number;
+  totalRolls: number;
+  updateTotalRollsState: (operation: string) => void;
 };
 
-export default function RollTracker({ diceValue }: Props) {
+export default function RollTracker({
+  diceValue,
+  totalRolls,
+  updateTotalRollsState,
+}: Props) {
   const [rollCount, setRollCounter] = useState(0);
 
   const decrementCount = () => {
-    setRollCounter(Math.max(0, rollCount - 1));
+    if (rollCount > 0) {
+      updateTotalRollsState("dec");
+      setRollCounter(rollCount - 1);
+      totalRolls--;
+    }
   };
 
   const incrementCount = () => {
     setRollCounter(rollCount + 1);
+    totalRolls++;
+    updateTotalRollsState("inc");
   };
   return (
     <View style={styles.rollCounterContainer}>
@@ -22,11 +34,16 @@ export default function RollTracker({ diceValue }: Props) {
       <Button label="-" onPress={decrementCount} />
       <Text style={styles.pressText}>{rollCount}</Text>
       <Button label="+" onPress={incrementCount} />
+      <Text style={[styles.pressText, { paddingLeft: 5 }]}>
+        {(totalRolls > 0 ? (100 * (rollCount / totalRolls)).toFixed(2) : 0) +
+          "%"}
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  fullContainer: {},
   rollCounterContainer: {
     flex: 1,
     flexDirection: "row",
@@ -44,4 +61,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     padding: 3,
   },
+  expectedProbabilityContainer: {},
 });

@@ -11,11 +11,28 @@ export default function Index() {
   };
   return (
     <View style={styles.container}>
-      <RollTrackerList
-        totalDiceRolls={totalRolls}
-        updateTotalRollsState={updateTotalRolls}
-      />
-      <Text style={[{ color: "#fff", fontSize: 40 }]}>{"test"}</Text>
+      <View>
+        <RollTrackerList
+          totalDiceRolls={totalRolls}
+          updateTotalRollsState={updateTotalRolls}
+        />
+      </View>
+      <View style={styles.expectedProbabilitiesContainer}>
+        <Text style={styles.approximateHeading}>
+          {"Approximate expected roll percentages:"}
+        </Text>
+        <Text style={styles.expectedValuesText}>{"2 ~ 2.77  %"}</Text>
+        <Text style={styles.expectedValuesText}>{"3 ~ 5.55  %"}</Text>
+        <Text style={styles.expectedValuesText}>{"4 ~ 8.33  %"}</Text>
+        <Text style={styles.expectedValuesText}>{"5 ~ 11.11 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"6 ~ 13.88 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"7 ~ 16.66 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"8 ~ 13.88 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"9 ~ 11.11 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"10 ~ 8.33 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"11 ~ 5.55 %"}</Text>
+        <Text style={styles.expectedValuesText}>{"12 ~ 2.77 %"}</Text>
+      </View>
     </View>
   );
 }
@@ -26,7 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#25292e",
     textAlign: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   text: {
@@ -35,4 +52,20 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   diceTrackerContainer: {},
+  expectedProbabilitiesContainer: {
+    justifyContent: "space-evenly",
+  },
+  expectedValuesText: {
+    color: "#fff",
+    fontSize: 22,
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  approximateHeading: {
+    color: "#fff",
+    fontSize: 30,
+    textAlign: "center",
+    justifyContent: "center",
+    paddingBottom: 10,
+  },
 });

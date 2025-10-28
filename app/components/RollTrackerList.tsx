@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#25292e",
     textAlign: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   diceTrackerContainer: {
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#25292e",
     flex: 1,
-    fontSize: 40,
+    fontSize: 25,
     color: "#fff",
   },
 });

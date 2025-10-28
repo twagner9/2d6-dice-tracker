@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textDecorationStyle: "solid",
     color: "#fff",
-    padding: 3,
+    padding: 1,
   },
   expectedProbabilityContainer: {},
 });

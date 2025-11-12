@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 type Props = {
   diceValue: number;
   totalRolls: number;
-  updateTotalRollsState: (operation: string) => void;
+  updateTotalRollsState: (operation: string, id: number) => void;
 };
 
 export default function RollTracker({
@@ -17,7 +17,7 @@ export default function RollTracker({
 
   const decrementCount = () => {
     if (rollCount > 0) {
-      updateTotalRollsState("dec");
+      updateTotalRollsState("dec", diceValue);
       setRollCounter(rollCount - 1);
       totalRolls--;
     }
@@ -26,7 +26,7 @@ export default function RollTracker({
   const incrementCount = () => {
     setRollCounter(rollCount + 1);
     totalRolls++;
-    updateTotalRollsState("inc");
+    updateTotalRollsState("inc", diceValue);
   };
   return (
     <View style={styles.rollCounterContainer}>

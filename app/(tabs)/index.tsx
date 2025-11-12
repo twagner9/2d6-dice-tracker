@@ -5,18 +5,11 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 export default function Index() {
   const [totalRolls, setTotalRolls] = useState<number>(0);
 
-  const updateTotalRolls = (operation: string) => {
-    if (operation === "inc") setTotalRolls(totalRolls + 1);
-    else if (operation === "dec") setTotalRolls(Math.max(totalRolls - 1, 0));
-  };
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
-          <RollTrackerList
-            totalDiceRolls={totalRolls}
-            updateTotalRollsState={updateTotalRolls}
-          />
+          <RollTrackerList />
         </View>
         <View style={styles.expectedProbabilitiesContainer}>
           <Text style={styles.approximateHeading}>

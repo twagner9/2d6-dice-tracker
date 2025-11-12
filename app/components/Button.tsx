@@ -30,6 +30,14 @@ export default function Button({ label, theme, onPress }: Props) {
         </Pressable>
       </View>
     );
+  } else if (theme === "clear") {
+    return (
+      <View style={[styles.buttonContainer, { backgroundColor: "#fff" }]}>
+        <Pressable style={styles.clearButton} onPress={onPress}>
+          <Text style={styles.buttonLabel}>{label}</Text>
+        </Pressable>
+      </View>
+    );
   }
 
   // Default theme
@@ -38,7 +46,7 @@ export default function Button({ label, theme, onPress }: Props) {
       <Pressable
         style={styles.button}
         onPress={onPress}
-        hitSlop={10} // Allows the user to be slightly less precise when pressing
+        hitSlop={12} // Allows the user to be slightly less precise when pressing
         pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }} // Allows the user's finger to move a bit without deregistering the click
       >
         <Text style={styles.buttonLabel}>{label}</Text>
@@ -71,4 +79,5 @@ const styles = StyleSheet.create({
   buttonIcon: {
     paddingRight: 8,
   },
+  clearButton: {},
 });

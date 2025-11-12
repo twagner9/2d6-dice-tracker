@@ -1,42 +1,36 @@
 import Button from "@/app/components/Button";
-import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type Props = {
   diceValue: number;
   totalRolls: number;
+  percentage: number;
   updateTotalRollsState: (operation: string, id: number) => void;
 };
 
 export default function RollTracker({
   diceValue,
   totalRolls,
+  percentage,
   updateTotalRollsState,
 }: Props) {
-  const [rollCount, setRollCounter] = useState(0);
-
   const decrementCount = () => {
-    if (rollCount > 0) {
+    if (totalRolls > 0) {
       updateTotalRollsState("dec", diceValue);
-      setRollCounter(rollCount - 1);
-      totalRolls--;
     }
   };
 
   const incrementCount = () => {
-    setRollCounter(rollCount + 1);
-    totalRolls++;
     updateTotalRollsState("inc", diceValue);
   };
   return (
     <View style={styles.rollCounterContainer}>
       <Text style={styles.labelText}>{diceValue}: </Text>
       <Button label="-" onPress={decrementCount} />
-      <Text style={styles.pressText}>{rollCount}</Text>
+      <Text style={styles.pressText}>{totalRolls}</Text>
       <Button label="+" onPress={incrementCount} />
       <Text style={[styles.pressText, { paddingLeft: 5 }]}>
-        {(totalRolls > 0 ? (100 * (rollCount / totalRolls)).toFixed(2) : 0) +
-          "%"}
+        {percentage + "%"}
       </Text>
     </View>
   );

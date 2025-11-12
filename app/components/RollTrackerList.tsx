@@ -7,6 +7,9 @@ export default function RollTrackerList() {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
     new Array(11).fill(0)
   );
+  const [percentageValues, setPercentageValues] = useState<Array<number>>(
+    new Array(11).fill(0)
+  );
   const [totalNumRolls, setTotalNumRolls] = useState<number>(0);
 
   /**
@@ -37,6 +40,13 @@ export default function RollTrackerList() {
 
     // Finally, update the total number of rolls
     setTotalNumRolls(rollCountValues.reduce((a, b) => a + b, 0));
+
+    // TODO: update this accordingly after changing the setRollCountValues method
+    setPercentageValues((prev) =>
+      prev.map((p, i) =>
+        i === id ? (p > 0 ? rollCountValues[i] / totalNumRolls : 0) : p
+      )
+    );
   }
 
   function clearAllCurrentRolls() {
@@ -51,6 +61,7 @@ export default function RollTrackerList() {
             key={i}
             diceValue={i}
             totalRolls={v}
+            percentage={percentageValues[i]}
             updateTotalRollsState={updateRolls}
           />
         ))}

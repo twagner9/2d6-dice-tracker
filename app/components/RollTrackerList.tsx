@@ -1,7 +1,8 @@
 import Button from "@/app/components/Button";
 import RollTracker from "@/app/components/RollTracker";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RollTrackerList() {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
@@ -17,7 +18,7 @@ export default function RollTrackerList() {
    * @param operation The operation that is specified by the button that was clicked.
    * @param id The ID of the RollTracker whose diceValue should be updated.
    */
-  function updateRolls(operation: string, id: number) {
+  function updateRolls(operation: "inc" | "dec" | "clear", id: number) {
     if (operation === "clear") {
       setRollCountValues(rollCountValues.map(() => 0));
       setTotalNumRolls(0);
@@ -34,47 +35,74 @@ export default function RollTrackerList() {
     // I can go directly to the correct element.
     setRollCountValues((prev) =>
       prev.map((v, i) =>
-        i === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v
+        i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v
       )
     );
 
-    // Finally, update the total number of rolls
+    // Update the total number of rolls
     setTotalNumRolls(rollCountValues.reduce((a, b) => a + b, 0));
 
     // TODO: update this accordingly after changing the setRollCountValues method
-    setPercentageValues((prev) =>
-      prev.map((p, i) =>
-        i === id ? (p > 0 ? rollCountValues[i] / totalNumRolls : 0) : p
-      )
+    // Finally, calculate the updated percentage for each value after the update
+    const updatedPercentages = rollCountValues.map((v) =>
+      totalNumRolls === 0 ? 0 : (v / totalNumRolls) * 100
     );
+    setPercentageValues(updatedPercentages);
   }
 
   function clearAllCurrentRolls() {
     updateRolls("clear", -1);
   }
 
+  // console.log(
+  //   "rollCountValues length: ",
+  //   rollCountValues.length,
+  //   rollCountValues
+  // );
+  // console.log(
+  //   "percentageValues length: ",
+  //   percentageValues.length,
+  //   percentageValues
+  // );
+
   return (
-    <View style={styles.fullTrackerContainer}>
-      <View>
-        {rollCountValues.map((v, i) => (
-          <RollTracker
-            key={i}
-            diceValue={i}
-            totalRolls={v}
-            percentage={percentageValues[i]}
-            updateTotalRollsState={updateRolls}
-          />
-        ))}
-        <View>
-          <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>
-          <Button label="Clear" onPress={clearAllCurrentRolls}></Button>
+    <SafeAreaProvider style={styles.safeArea}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <View style={styles.diceTrackerContainer}>
+          {rollCountValues.map((v, i) => (
+            <RollTracker
+              key={i}
+              diceValue={i + 2}
+              totalRolls={v}
+              percentage={percentageValues[i]}
+              updateTotalRollsState={updateRolls}
+            />
+          ))}
+          <View>
+            <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>
+            <Button label="Clear" onPress={clearAllCurrentRolls}></Button>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#25292e",
+  },
+  scrollContent: {
+    flex: 1,
+    flexDirection: "column",
+    padding: 12,
+    textAlign: "center",
+    justifyContent: "space-evenly",
+  },
   fullTrackerContainer: {
     flex: 1,
     flexDirection: "row",
@@ -85,10 +113,11 @@ const styles = StyleSheet.create({
   },
   diceTrackerContainer: {
     flex: 1,
+    flexDirection: "column",
     backgroundColor: "#25292e",
     textAlign: "center",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch",
   },
   totalText: {
     textAlign: "center",

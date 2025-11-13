@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [totalRolls, setTotalRolls] = useState<number>(0);
-
   return (
     <View style={styles.container}>
       <ScrollView>

@@ -4,8 +4,11 @@ import { StyleSheet, Text, View } from "react-native";
 type Props = {
   diceValue: number;
   totalRolls: number;
-  percentage: number;
-  updateTotalRollsState: (operation: string, id: number) => void;
+  percentage: string;
+  updateTotalRollsState: (
+    operation: "inc" | "dec" | "clear",
+    id: number
+  ) => void;
 };
 
 export default function RollTracker({

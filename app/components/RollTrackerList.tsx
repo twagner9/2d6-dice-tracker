@@ -1,6 +1,6 @@
 import Button from "@/app/components/Button";
 import RollTracker from "@/app/components/RollTracker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -21,49 +21,42 @@ export default function RollTrackerList() {
   function updateRolls(operation: "inc" | "dec" | "clear", id: number) {
     if (operation === "clear") {
       setRollCountValues(rollCountValues.map(() => 0));
-      setTotalNumRolls(0);
+      // setTotalNumRolls(0);
       return;
     }
 
     // Bad ID; do nothing
     if (id === null) return;
 
-    // Update the number of rolls based on the existing array using the RollTracker's
-    // id, which in this case, will be its diceValue. Also, if during the loop the current
-    // ID doesn't match the specified, keep the value the same
-    // TODO: I can improve this because it's based on the dice value; I do not need to loop,
-    // I can go directly to the correct element.
-    setRollCountValues((prev) =>
-      prev.map((v, i) =>
-        i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v
+    const updatedRolls = rollCountValues.map((v, i) =>
+      i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v
+    );
+
+    setRollCountValues(updatedRolls);
+  }
+
+  // Remember: useEffect is very useful when some state is dependent on another state;
+  // it allows an update to the dependent state to be applied each time an update
+  // occurs. And, since these updates are async, they will be completed only after
+  // the independent state has finished updating
+
+  // Update the total number of rolls each time an increment/decrement occurs
+  useEffect(() => {
+    setTotalNumRolls(rollCountValues.reduce((a, b) => a + b, 0));
+  }, [rollCountValues]);
+
+  // Update the percentages for each value each time the total number of rolls is updated
+  useEffect(() => {
+    setPercentageValues(
+      rollCountValues.map((v) =>
+        totalNumRolls === 0 ? 0 : (v / totalNumRolls) * 100
       )
     );
-
-    // Update the total number of rolls
-    setTotalNumRolls(rollCountValues.reduce((a, b) => a + b, 0));
-
-    // TODO: update this accordingly after changing the setRollCountValues method
-    // Finally, calculate the updated percentage for each value after the update
-    const updatedPercentages = rollCountValues.map((v) =>
-      totalNumRolls === 0 ? 0 : (v / totalNumRolls) * 100
-    );
-    setPercentageValues(updatedPercentages);
-  }
+  }, [totalNumRolls]);
 
   function clearAllCurrentRolls() {
     updateRolls("clear", -1);
   }
-
-  // console.log(
-  //   "rollCountValues length: ",
-  //   rollCountValues.length,
-  //   rollCountValues
-  // );
-  // console.log(
-  //   "percentageValues length: ",
-  //   percentageValues.length,
-  //   percentageValues
-  // );
 
   return (
     <SafeAreaProvider style={styles.safeArea}>
@@ -77,7 +70,8 @@ export default function RollTrackerList() {
               key={i}
               diceValue={i + 2}
               totalRolls={v}
-              percentage={percentageValues[i]}
+              // percentage={percentageValues[i]}
+              percentage={percentageValues[i].toFixed(2)}
               updateTotalRollsState={updateRolls}
             />
           ))}

@@ -1,7 +1,7 @@
 import Button from "@/app/components/Button";
 import RollTracker from "@/app/components/RollTracker";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RollTrackerList() {
@@ -60,27 +60,28 @@ export default function RollTrackerList() {
 
   return (
     <SafeAreaProvider style={styles.safeArea}>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <View style={styles.diceTrackerContainer}>
-          {rollCountValues.map((v, i) => (
-            <RollTracker
-              key={i}
-              diceValue={i + 2}
-              totalRolls={v}
-              // percentage={percentageValues[i]}
-              percentage={percentageValues[i].toFixed(2)}
-              updateTotalRollsState={updateRolls}
-            />
-          ))}
-          <View>
-            <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>
-            <Button label="Clear" onPress={clearAllCurrentRolls}></Button>
+      <View style={styles.diceTrackerContainer}>
+        {rollCountValues.map((v, i) => (
+          <RollTracker
+            key={i}
+            diceValue={i + 2}
+            totalRolls={v}
+            // percentage={percentageValues[i]}
+            percentage={percentageValues[i].toFixed(2)}
+            updateTotalRollsState={updateRolls}
+          />
+        ))}
+        <View>
+          <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>
+          <View style={styles.clearButtonContainer}>
+            <Button
+              label="Clear"
+              onPress={clearAllCurrentRolls}
+              theme={"clear"}
+            ></Button>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaProvider>
   );
 }
@@ -95,23 +96,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: 12,
     textAlign: "center",
-    justifyContent: "space-evenly",
-  },
-  fullTrackerContainer: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#25292e",
-    textAlign: "center",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  },
-  diceTrackerContainer: {
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#25292e",
-    textAlign: "center",
     justifyContent: "center",
     alignItems: "stretch",
+  },
+  diceTrackerContainer: {
+    flexDirection: "column",
+    flex: 1,
+    justifyContent: "center",
   },
   totalText: {
     textAlign: "center",
@@ -122,5 +113,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#fff",
   },
-  clearButton: {},
+  clearButtonContainer: {
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

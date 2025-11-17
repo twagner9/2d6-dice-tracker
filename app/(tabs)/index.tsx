@@ -1,13 +1,12 @@
 import RollTrackerList from "@/app/components/RollTrackerList";
-import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Index() {
-  const [totalRolls, setTotalRolls] = useState<number>(0);
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View>
+    <SafeAreaProvider style={styles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.diceTrackerContainer}>
           <RollTrackerList />
         </View>
         <View style={styles.expectedProbabilitiesContainer}>
@@ -27,14 +26,14 @@ export default function Index() {
           <Text style={styles.expectedValuesText}>{"12 ~ 2.77 %"}</Text>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     backgroundColor: "#25292e",
     textAlign: "center",
     justifyContent: "space-evenly",
@@ -45,12 +44,21 @@ const styles = StyleSheet.create({
     textDecorationStyle: "solid",
     color: "#fff",
   },
-  diceTrackerContainer: {},
+  diceTrackerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#fff",
+    borderRadius: 2,
+  },
   expectedProbabilitiesContainer: {
-    justifyContent: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
     borderColor: "#fff",
     borderStyle: "solid",
-    borderWidth: 2,
+    borderWidth: 3,
+    paddingTop: 4,
+    borderRadius: 10,
   },
   expectedValuesText: {
     color: "#fff",

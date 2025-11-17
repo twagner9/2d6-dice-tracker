@@ -32,7 +32,7 @@ export default function RollTracker({
       <Button label="-" onPress={decrementCount} />
       <Text style={styles.pressText}>{totalRolls}</Text>
       <Button label="+" onPress={incrementCount} />
-      <Text style={[styles.pressText, { paddingLeft: 5 }]}>
+      <Text style={[styles.percentageText, { paddingLeft: 5 }]}>
         {percentage + "%"}
       </Text>
     </View>
@@ -57,6 +57,16 @@ const styles = StyleSheet.create({
     textDecorationStyle: "solid",
     color: "#fff",
     padding: 1,
+    textAlign: "center",
+    minWidth: 30,
+  },
+  percentageText: {
+    fontSize: 20,
+    textDecorationStyle: "solid",
+    color: "#fff",
+    padding: 1,
+    textAlign: "right",
+    minWidth: 85,
   },
   expectedProbabilityContainer: {},
 });

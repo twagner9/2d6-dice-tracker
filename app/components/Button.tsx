@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
   label: string;
-  theme?: "primary";
+  theme?: string;
   onPress?: () => void;
 };
 
@@ -32,9 +32,9 @@ export default function Button({ label, theme, onPress }: Props) {
     );
   } else if (theme === "clear") {
     return (
-      <View style={[styles.buttonContainer, { backgroundColor: "#fff" }]}>
+      <View style={[styles.clearButtonContainer, { backgroundColor: "#fff" }]}>
         <Pressable style={styles.clearButton} onPress={onPress}>
-          <Text style={styles.buttonLabel}>{label}</Text>
+          <Text style={styles.clearButtonLabel}>{label}</Text>
         </Pressable>
       </View>
     );
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    backgroundColor: "#fff",
   },
   buttonLabel: {
     alignItems: "center",
@@ -79,5 +80,27 @@ const styles = StyleSheet.create({
   buttonIcon: {
     paddingRight: 8,
   },
-  clearButton: {},
+  clearButtonContainer: {
+    width: 60,
+    height: 30,
+    marginHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 5,
+    borderColor: "black",
+    borderRadius: 3,
+  },
+  clearButton: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 75,
+    height: 60,
+  },
+  clearButtonLabel: {
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    fontSize: 24,
+  },
 });

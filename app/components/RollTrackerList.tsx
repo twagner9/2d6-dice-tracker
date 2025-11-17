@@ -12,6 +12,8 @@ export default function RollTrackerList() {
     new Array(11).fill(0)
   );
   const [totalNumRolls, setTotalNumRolls] = useState<number>(0);
+  const [confirmClearAllModal, setConfirmClearAllModal] =
+    useState<boolean>(false);
 
   /**
    *
@@ -55,6 +57,7 @@ export default function RollTrackerList() {
   }, [totalNumRolls]);
 
   function clearAllCurrentRolls() {
+    // TODO: have an if conditional that checks the result of the modal before going through with the clear operation
     updateRolls("clear", -1);
   }
 

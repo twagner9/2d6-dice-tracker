@@ -3,6 +3,7 @@ import RollTracker from "@/app/components/RollTracker";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import ConfirmClearModal from "./ConfirmClearModal";
 
 export default function RollTrackerList() {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
@@ -13,6 +14,7 @@ export default function RollTrackerList() {
   );
   const [totalNumRolls, setTotalNumRolls] = useState<number>(0);
   const [showClearAllModal, setShowClearAllModal] = useState<boolean>(false);
+  const [clearModalResponse, setClearModalResponse] = useState<boolean>(false);
 
   /**
    *
@@ -57,8 +59,11 @@ export default function RollTrackerList() {
 
   function clearAllCurrentRolls() {
     // TODO: have an if conditional that checks the result of the modal before going through with the clear operation
-    setShowClearAllModal(true);
-    updateRolls("clear", -1);
+    if (clearModalResponse === true) {
+      updateRolls("clear", -1);
+      setClearModalResponse(false);
+    }
+    setShowClearAllModal(false);
   }
 
   return (
@@ -79,9 +84,13 @@ export default function RollTrackerList() {
           <View style={styles.clearButtonContainer}>
             <Button
               label="Clear"
-              onPress={clearAllCurrentRolls}
+              onPress={() => setShowClearAllModal(true)}
               theme={"clear"}
-            ></Button>
+            />
+            <ConfirmClearModal
+              isVisible={showClearAllModal}
+              onResponse={setClearModalResponse}
+            />
           </View>
         </View>
       </View>

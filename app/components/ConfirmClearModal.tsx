@@ -8,34 +8,49 @@ type Props = PropsWithChildren<{
 
 export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
   return (
-    <View>
-      <Modal animationType="fade" transparent={false} visible={isVisible}>
-        <View style={styles.confirmClearModalContainer}>
-          <View style={styles.confirmClearModalTitleContainer}>
-            <Text>{"Clear All Rolls?"}</Text>
-            <View style={styles.confirmClearModalContentContainer}>
-              <Text>
-                {
-                  "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
-                }
-              </Text>
-              <View>
-                <Pressable onPress={() => onResponse(true)}>
-                  <Text>{"Yes"}</Text>
-                </Pressable>
-                <Pressable onPress={() => onResponse(false)}>
-                  <Text>{"No"}</Text>
-                </Pressable>
-              </View>
+    <Modal
+      style={styles.clearModalStyle}
+      animationType="fade"
+      transparent={false}
+      visible={isVisible}
+    >
+      <View style={styles.confirmClearModalContainer}>
+        <View style={styles.confirmClearModalTitleContainer}>
+          <Text>{"Clear All Rolls?"}</Text>
+          <View style={styles.confirmClearModalContentContainer}>
+            <Text>
+              {
+                "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
+              }
+            </Text>
+            <View style={styles.modalButtonsContainer}>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => onResponse(true)}
+                hitSlop={12}
+              >
+                <Text>{"Yes"}</Text>
+              </Pressable>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => onResponse(false)}
+              >
+                <Text>{"No"}</Text>
+              </Pressable>
             </View>
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  clearModalStyle: {
+    maxHeight: 100,
+    maxWidth: 150,
+    backgroundColor: "#25292e",
+  },
   confirmClearModalContainer: {
     flex: 1,
     flexDirection: "column",
@@ -44,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     textAlign: "center",
     justifyContent: "center",
+    flexDirection: "column",
   },
   confirmClearModalContentContainer: {
     flex: 1,
@@ -57,4 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontSize: 16,
   },
+  modalButtonsContainer: {
+    flexDirection: "row",
+    padding: 10,
+  },
+  modalButton: {},
 });

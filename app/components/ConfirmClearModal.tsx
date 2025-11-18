@@ -3,10 +3,10 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = PropsWithChildren<{
   isVisible: boolean;
-  onClose: () => boolean;
+  onResponse: (shouldClear: boolean) => void;
 }>;
 
-export default function ConfirmClearModal({ isVisible, onClose }: Props) {
+export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
   return (
     <View>
       <Modal animationType="fade" transparent={false} visible={isVisible}>
@@ -16,14 +16,14 @@ export default function ConfirmClearModal({ isVisible, onClose }: Props) {
             <View style={styles.confirmClearModalContentContainer}>
               <Text>
                 {
-                  "Clearing all rolls cannot be undone. Are you sure you wish to clear?"
+                  "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
                 }
               </Text>
               <View>
-                <Pressable>
+                <Pressable onPress={() => onResponse(true)}>
                   <Text>{"Yes"}</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={() => onResponse(false)}>
                   <Text>{"No"}</Text>
                 </Pressable>
               </View>

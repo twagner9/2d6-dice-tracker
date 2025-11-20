@@ -8,17 +8,20 @@ type Props = PropsWithChildren<{
 
 export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
   return (
-    <Modal
-      style={styles.clearModalStyle}
-      animationType="fade"
-      transparent={false}
-      visible={isVisible}
-    >
+    <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={styles.confirmClearModalContainer}>
         <View style={styles.confirmClearModalTitleContainer}>
-          <Text>{"Clear All Rolls?"}</Text>
+          <Text style={styles.titleText}>{"Clear All Rolls?"}</Text>
           <View style={styles.confirmClearModalContentContainer}>
-            <Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 16,
+                textAlign: "center",
+                paddingLeft: 10,
+                paddingRight: 10,
+              }}
+            >
               {
                 "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
               }
@@ -26,16 +29,17 @@ export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
             <View style={styles.modalButtonsContainer}>
               <Pressable
                 style={styles.modalButton}
-                onPress={() => onResponse(true)}
+                onPress={() => onResponse(false)}
                 hitSlop={12}
               >
-                <Text>{"Yes"}</Text>
+                <Text>{"Cancel"}</Text>
               </Pressable>
               <Pressable
                 style={styles.modalButton}
-                onPress={() => onResponse(false)}
+                onPress={() => onResponse(true)}
+                hitSlop={12}
               >
-                <Text>{"No"}</Text>
+                <Text>{"Reset"}</Text>
               </Pressable>
             </View>
           </View>
@@ -46,20 +50,31 @@ export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
 }
 
 const styles = StyleSheet.create({
-  clearModalStyle: {
-    maxHeight: 100,
-    maxWidth: 150,
-    backgroundColor: "#25292e",
-  },
+  /**NOTE: styling is not done on the modal itself, but on the top level container.
+   * Using the top level view, you can set the background to be translucent with
+   * whatever background color is desired
+   */
   confirmClearModalContainer: {
     flex: 1,
     flexDirection: "column",
+    alignItems: "center",
+    borderRadius: 20,
+    backgroundColor: "rgba(0,0,0,0.75)",
+    minHeight: "25%",
+    maxHeight: "30%",
+    margin: "auto",
   },
   confirmClearModalTitleContainer: {
     fontSize: 32,
     textAlign: "center",
     justifyContent: "center",
+    alignItems: "center",
     flexDirection: "column",
+  },
+  titleText: {
+    fontSize: 28,
+    color: "#fff",
+    padding: 5,
   },
   confirmClearModalContentContainer: {
     flex: 1,
@@ -75,7 +90,18 @@ const styles = StyleSheet.create({
   },
   modalButtonsContainer: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 10,
   },
-  modalButton: {},
+  modalButton: {
+    padding: 5,
+    width: "25%",
+    margin: 2,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: "#fff",
+  },
 });

@@ -9,38 +9,40 @@ type Props = PropsWithChildren<{
 export default function ConfirmClearModal({ isVisible, onResponse }: Props) {
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
-      <View style={styles.confirmClearModalContainer}>
-        <View style={styles.confirmClearModalTitleContainer}>
-          <Text style={styles.titleText}>{"Clear All Rolls?"}</Text>
-          <View style={styles.confirmClearModalContentContainer}>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 16,
-                textAlign: "center",
-                paddingLeft: 10,
-                paddingRight: 10,
-              }}
-            >
-              {
-                "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
-              }
-            </Text>
-            <View style={styles.modalButtonsContainer}>
-              <Pressable
-                style={styles.modalButton}
-                onPress={() => onResponse(false)}
-                hitSlop={12}
+      <View style={styles.overlay}>
+        <View style={styles.confirmClearModalContainer}>
+          <View style={styles.confirmClearModalTitleContainer}>
+            <Text style={styles.titleText}>{"Clear All Rolls?"}</Text>
+            <View style={styles.confirmClearModalContentContainer}>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 16,
+                  textAlign: "center",
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                }}
               >
-                <Text>{"Cancel"}</Text>
-              </Pressable>
-              <Pressable
-                style={styles.modalButton}
-                onPress={() => onResponse(true)}
-                hitSlop={12}
-              >
-                <Text>{"Reset"}</Text>
-              </Pressable>
+                {
+                  "Clearing all rolls cannot be undone. Are you sure you wish to reset?"
+                }
+              </Text>
+              <View style={styles.modalButtonsContainer}>
+                <Pressable
+                  style={styles.modalButton}
+                  onPress={() => onResponse(false)}
+                  hitSlop={12}
+                >
+                  <Text>{"Cancel"}</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.modalButton}
+                  onPress={() => onResponse(true)}
+                  hitSlop={12}
+                >
+                  <Text style={{ color: "red" }}>{"Reset"}</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </View>
@@ -54,13 +56,19 @@ const styles = StyleSheet.create({
    * Using the top level view, you can set the background to be translucent with
    * whatever background color is desired
    */
-  confirmClearModalContainer: {
+
+  // Overlay is broken up from the actual content to enable better visual results.
+  overlay: {
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.9)",
+  },
+  // This controls where the overall modal content will be
+  confirmClearModalContainer: {
+    alignItems: "center",
     borderRadius: 20,
-    backgroundColor: "rgba(0,0,0,0.75)",
-    minHeight: "25%",
     maxHeight: "30%",
     margin: "auto",
   },
@@ -102,6 +110,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: "#e7e4e4ff",
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
   },
 });

@@ -14,7 +14,6 @@ export default function RollTrackerList() {
   );
   const [totalNumRolls, setTotalNumRolls] = useState<number>(0);
   const [showClearAllModal, setShowClearAllModal] = useState<boolean>(false);
-  const [clearModalResponse, setClearModalResponse] = useState<boolean>(false);
 
   /**
    *
@@ -57,11 +56,11 @@ export default function RollTrackerList() {
     );
   }, [totalNumRolls]);
 
-  function clearAllCurrentRolls() {
+  function clearAllCurrentRolls(response: boolean) {
     // TODO: have an if conditional that checks the result of the modal before going through with the clear operation
-    if (clearModalResponse === true) {
+    if (response === true) {
       updateRolls("clear", -1);
-      setClearModalResponse(false);
+      setShowClearAllModal(false);
     }
     setShowClearAllModal(false);
   }
@@ -89,7 +88,7 @@ export default function RollTrackerList() {
             />
             <ConfirmClearModal
               isVisible={showClearAllModal}
-              onResponse={setClearModalResponse}
+              onResponse={clearAllCurrentRolls}
             />
           </View>
         </View>

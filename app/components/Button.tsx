@@ -32,7 +32,7 @@ export default function Button({ label, theme, onPress }: Props) {
     );
   } else if (theme === "clear") {
     return (
-      <View style={[styles.clearButtonContainer, { backgroundColor: "#fff" }]}>
+      <View style={[styles.clearButtonContainer]}>
         <Pressable style={styles.clearButton} onPress={onPress}>
           <Text style={styles.clearButtonLabel}>{label}</Text>
         </Pressable>
@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
   },
   button: {
     width: "100%",
@@ -70,7 +72,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#fff",
   },
   buttonLabel: {
     alignItems: "center",
@@ -81,14 +82,16 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   clearButtonContainer: {
-    width: 60,
+    width: 80,
     height: 30,
     marginHorizontal: 20,
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 5,
-    borderColor: "black",
     borderRadius: 3,
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
   },
   clearButton: {
     textAlign: "center",

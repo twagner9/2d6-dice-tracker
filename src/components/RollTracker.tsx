@@ -1,4 +1,4 @@
-import Button from "@/app/components/Button";
+import Button from "@/src/components/Button";
 import { StyleSheet, Text, View } from "react-native";
 
 type Props = {

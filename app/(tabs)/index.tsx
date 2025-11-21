@@ -1,4 +1,4 @@
-import RollTrackerList from "@/app/components/RollTrackerList";
+import RollTrackerList from "@/src/components/RollTrackerList";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 

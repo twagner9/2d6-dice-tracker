@@ -1,9 +1,9 @@
-import Button from "@/app/components/Button";
-import RollTracker from "@/app/components/RollTracker";
+import Button from "@/src/components/Button";
+import ConfirmClearModal from "@/src/components/ConfirmClearModal";
+import RollTracker from "@/src/components/RollTracker";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import ConfirmClearModal from "./ConfirmClearModal";
 
 export default function RollTrackerList() {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(

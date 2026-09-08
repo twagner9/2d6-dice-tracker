@@ -1,0 +1,9 @@
+now will deploy with:
+
+`npx expo run:android` when smartphone is plugged in to load the app onto the device. Will later try with iOS as well.
+
+The app will persist when installed this way, meaning I don't have to load up my laptop to actually use it when playing a game.
+Build and load time does take awhile, however.
+
+Shift + M in the window running the above command will open Expo's devtools menu. Doing so also lets you open the SQLite database for inspecting
+data and executing queries as necessary.

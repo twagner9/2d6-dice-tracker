@@ -7,3 +7,6 @@ Build and load time does take awhile, however.
 
 Shift + M in the window running the above command will open Expo's devtools menu. Doing so also lets you open the SQLite database for inspecting
 data and executing queries as necessary.
+
+Must also install Android SDK on any device planned to be used for this project. It requires exporting the SDK location in the .bashrc
+to ANDROID_HOME.

@@ -1,8 +1,16 @@
 import RollTrackerList from "@/src/components/RollTrackerList";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Index() {
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+
+  function newGameClick() {
+    // TODO: execute the logic for creating a new match
+
+    setGameStarted(true);
+  }
   return (
     <SafeAreaProvider style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

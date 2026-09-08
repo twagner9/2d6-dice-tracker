@@ -38,6 +38,14 @@ export default function Button({ label, theme, onPress }: Props) {
         </Pressable>
       </View>
     );
+  } else if (theme == "new game") {
+    return (
+      <View style={[styles.newGameButtonContainer]}>
+        <Pressable style={styles.newGameButton} onPress={onPress}>
+          <Text style={styles.newGameLabel}>{label}</Text>
+        </Pressable>
+      </View>
+    );
   }
 
   // Default theme
@@ -106,4 +114,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
   },
+  newGameButtonContainer: {
+    marginVertical: 0,
+    alignSelf: "center",
+  },
+  newGameButton: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  newGameLabel: {},
 });

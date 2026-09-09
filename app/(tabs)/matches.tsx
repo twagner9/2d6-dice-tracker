@@ -13,17 +13,19 @@ import { StyleSheet, Text, View } from "react-native";
 export default function MatchesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>
-        Here is where the statistics for each individual game will go.
-      </Text>
+      <View style={styles.headingText}>
+        <Text style={styles.matchHistoryText}>{"Match History"}</Text>
+      </View>
       {/* TODO: Make this spawn based on the total number of matches stored from the database */}
-      <HistoryRecord
-        matchId={1}
-        date={new Date()}
-        players={["John", "Sarah", "Michael"]}
-        winner={"John"}
-        rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-      />
+      <View>
+        <HistoryRecord
+          matchId={1}
+          date={new Date()}
+          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
+          winner={"John"}
+          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+        />
+      </View>
     </View>
   );
 }
@@ -39,6 +41,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     textDecorationStyle: "solid",
+    color: "#fff",
+  },
+  headingText: {},
+  matchHistoryText: {
     color: "#fff",
   },
 });

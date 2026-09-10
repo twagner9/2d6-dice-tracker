@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   headingText: { padding: 20 },
   matchHistoryText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 24,
   },
   // TODO: make put padding between its children
   matchScroller: {

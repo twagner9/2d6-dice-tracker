@@ -1,21 +1,29 @@
 import Button from "@/src/components/Button";
 import RollTrackerList from "@/src/components/RollTrackerList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [newGameButtonActive, setNewGameButtonActive] =
+    useState<boolean>(false);
   const [players, setPlayers] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (players.length >= 3 && players.length <= 6) {
+      setNewGameButtonActive(true);
+    } else {
+      setNewGameButtonActive(false);
+    }
+  }, [players]);
 
   function startGameClick() {
     // TODO: execute the logic for creating a new match
     // 1. pull the entered players and ensure there are valid strings in
     // each input, and that the length of the array
-    setPlayers([...players, "John"]);
-    setPlayers([...players, "Slink"]);
-    setPlayers([...players, "Dotty"]);
-    if (players.length < 3 || players.length > 6) {
+
+    if (players.length < 3 && players.length > 6) {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
     }
@@ -46,6 +54,7 @@ export default function Index() {
               label={"Start Game"}
               theme={"new game"}
               onPress={startGameClick}
+              enabled={newGameButtonActive}
             />
           </View>
         )}

@@ -67,7 +67,7 @@ export default function HistoryRecord(props: {
 const styles = StyleSheet.create({
   recordView: {
     borderWidth: 1,
-    borderColor: "#fff",
+    borderColor: "#ffd33d",
     borderRadius: 5,
     marginTop: 10,
     width: "85%",

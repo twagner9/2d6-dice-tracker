@@ -4,10 +4,16 @@ type Props = {
   label: string;
   theme?: string;
   onPress?: () => void;
+  enabled: boolean;
 };
 
 // For now this is pulled from the demo project; really this component will probably have its scope limited to the
-export default function Button({ label, theme, onPress }: Props) {
+export default function Button({
+  label,
+  theme,
+  onPress,
+  enabled = true,
+}: Props) {
   // Theme for the primary button; by passing the theme as a prop, it will automatically
   // style the button based on the selected theme, passed from the actual location that
   // the button will be used. Good for making buttons with a variety of themes (will need
@@ -41,7 +47,14 @@ export default function Button({ label, theme, onPress }: Props) {
   } else if (theme == "new game") {
     return (
       <View style={[styles.newGameButtonContainer]}>
-        <Pressable style={styles.newGameButton} onPress={onPress}>
+        <Pressable
+          disabled={!enabled}
+          style={[
+            styles.newGameButton,
+            !enabled && styles.disabledNewGameButtonLabel,
+          ]}
+          onPress={onPress}
+        >
           <Text style={styles.newGameLabel}>{label}</Text>
         </Pressable>
       </View>
@@ -138,5 +151,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     fontSize: 18,
+  },
+  disabledNewGameButtonLabel: {
+    opacity: 0.3,
   },
 });

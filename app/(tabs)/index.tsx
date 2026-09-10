@@ -13,7 +13,10 @@ export default function Index() {
   }
   return (
     <SafeAreaProvider style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <View style={styles.diceTrackerContainer}>
           <RollTrackerList />
         </View>

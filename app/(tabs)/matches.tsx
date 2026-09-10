@@ -1,5 +1,5 @@
 import HistoryRecord from "@/src/components/HistoryRecord";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 /**
  * This tab needs to have a few things going on now that we're storing previous games:
@@ -17,7 +17,11 @@ export default function MatchesScreen() {
         <Text style={styles.matchHistoryText}>{"Match History"}</Text>
       </View>
       {/* TODO: Make this spawn based on the total number of matches stored from the database */}
-      <View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={styles.matchScroller}
+      >
         <HistoryRecord
           matchId={1}
           date={new Date()}
@@ -25,7 +29,28 @@ export default function MatchesScreen() {
           winner={"John"}
           rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
         />
-      </View>
+        <HistoryRecord
+          matchId={1}
+          date={new Date()}
+          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
+          winner={"John"}
+          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+        />
+        <HistoryRecord
+          matchId={1}
+          date={new Date()}
+          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
+          winner={"John"}
+          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+        />
+        <HistoryRecord
+          matchId={1}
+          date={new Date()}
+          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
+          winner={"John"}
+          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -35,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#25292e",
     textAlign: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   text: {
@@ -43,8 +68,13 @@ const styles = StyleSheet.create({
     textDecorationStyle: "solid",
     color: "#fff",
   },
-  headingText: {},
+  headingText: { padding: 20 },
   matchHistoryText: {
     color: "#fff",
+    fontSize: 20,
+  },
+  // TODO: make put padding between its children
+  matchScroller: {
+    width: "100%",
   },
 });

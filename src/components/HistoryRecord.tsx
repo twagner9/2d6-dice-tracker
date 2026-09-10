@@ -15,16 +15,18 @@ export default function HistoryRecord(props: {
             style={styles.recordText}
           >{`Match ID: ${props.matchId.toString()}`}</Text>
           <Text
-            style={styles.recordText}
+            style={styles.dateText}
           >{`Date: ${props.date.toLocaleString()}`}</Text>
         </View>
         <View style={styles.playersView}>
           <Text style={styles.recordText}>{"Players:"}</Text>
-          {props.players.map((str: string, index: number) => (
-            <Text style={styles.recordText} key={index}>
-              {str}
-            </Text>
-          ))}
+          <View style={styles.playersGrid}>
+            {props.players.map((str: string, index: number) => (
+              <Text style={styles.playersText} key={index}>
+                {str}
+              </Text>
+            ))}
+          </View>
         </View>
         <View style={styles.winnerView}>
           <Text style={styles.recordText}>{`Winner: ${props.winner}`}</Text>
@@ -67,19 +69,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     borderRadius: 5,
+    marginTop: 10,
+    width: "85%",
+    alignSelf: "center",
   },
-  genInfoView: { flexDirection: "row", alignItems: "center", gap: 40 },
+  genInfoView: { flexDirection: "row", alignItems: "center" },
   playersView: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 7,
-    flexWrap: "wrap",
+    alignItems: "flex-start",
+    width: "100%",
   },
-  playersText: {},
+  playersGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    flex: 1,
+  },
+  playersText: {
+    width: "33.33%",
+    color: "#fff",
+    padding: 5,
+  },
+  dateText: {
+    textAlign: "right",
+    color: "#fff",
+    padding: 5,
+  },
   winnerView: {},
   rollsView: { flexDirection: "row", alignItems: "flex-start" },
   rollsColumn: { flex: 1 },
   recordText: {
     color: "#fff",
+    padding: 5,
   },
 });

@@ -10,3 +10,10 @@ data and executing queries as necessary.
 
 Must also install Android SDK on any device planned to be used for this project. It requires exporting the SDK location in the .bashrc
 to ANDROID_HOME.
+
+Used EAS, or Expo Application Service, to build the app onto my smartphone for persistence. Otherwise, the current app will only operate when plugged
+into a device that actually runs the code.
+
+Command for building while plugged in: eas build --platform android --profile preview
+Installed eas with `npm install --global eas-cli`, then executed `eas login` and `eas configure`. Had to create an account with EAS in order
+to use the service, but used firefox relay to at least not give out my email.

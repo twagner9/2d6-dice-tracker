@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function PlayerInput() {
+type PlayerProps = {
+  playerNumber: number;
+};
+
+export default function PlayerInput({ playerNumber }: PlayerProps) {
   const [name, setName] = useState<string>("");
 
   /**
@@ -16,12 +20,34 @@ export default function PlayerInput() {
    */
   return (
     <View style={style.labelAndInputArea}>
-      <Text>{"Player 1:"}</Text>
-      <TextInput></TextInput>
+      <View style={style.playerView}>
+        <Text style={style.playerLabel}>{`Player ${playerNumber}:`}</Text>
+        <TextInput style={style.playerInput}></TextInput>
+      </View>
     </View>
   );
 }
 
 const style = StyleSheet.create({
-  labelAndInputArea: {},
+  labelAndInputArea: {
+    paddingBottom: 15,
+  },
+  playerView: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  playerLabel: {
+    color: "white",
+    fontSize: 20,
+    marginRight: 20,
+  },
+  playerInput: {
+    borderColor: "#bcf5f5",
+    borderWidth: 2,
+    backgroundColor: "#fff",
+    width: "auto",
+    flex: 1,
+    color: "black",
+  },
 });

@@ -1,8 +1,16 @@
 import Button from "@/src/components/Button";
+import PlayersScreen from "@/src/components/PlayersScreen";
 import RollTrackerList from "@/src/components/RollTrackerList";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -23,7 +31,7 @@ export default function Index() {
     // 1. pull the entered players and ensure there are valid strings in
     // each input, and that the length of the array
 
-    if (players.length < 3 && players.length > 6) {
+    if (players.length < 3 || players.length > 6) {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
     }
@@ -37,29 +45,37 @@ export default function Index() {
     setGameStarted(true);
   }
   return (
-    <SafeAreaProvider style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1 }}
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <Text style={styles.beginGameText}>Track a New Game</Text>
-        {gameStarted ? (
-          <View style={styles.diceTrackerContainer}>
-            <RollTrackerList />
-          </View>
-        ) : (
-          // {/* TODO: add the player input logic here */}
-          <View>
-            <Button
-              label={"Start Game"}
-              theme={"new game"}
-              onPress={startGameClick}
-              enabled={newGameButtonActive}
-            />
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaProvider>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollContent}
+          style={styles.scrollContainer}
+        >
+          <Text style={styles.beginGameText}>Track a New Game</Text>
+          {gameStarted ? (
+            <View style={styles.diceTrackerContainer}>
+              <RollTrackerList />
+            </View>
+          ) : (
+            // {/* TODO: add the player input logic here */}
+            <View>
+              <PlayersScreen />
+              <Button
+                label={"Start Game"}
+                theme={"new game"}
+                onPress={startGameClick}
+                enabled={newGameButtonActive}
+              />
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -75,7 +91,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#25292e",
     textAlign: "center",
-    justifyContent: "space-evenly",
     alignItems: "center",
   },
   text: {
@@ -88,5 +103,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: "#fff",
     borderRadius: 2,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 125,
   },
 });

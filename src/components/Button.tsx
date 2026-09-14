@@ -59,6 +59,23 @@ export default function Button({
         </Pressable>
       </View>
     );
+  } else if (theme == "addOrRemove") {
+    return (
+      <View style={[styles.addOrRemoveButtonView, { backgroundColor: "#fff" }]}>
+        <Pressable
+          style={[
+            styles.addOrRemoveButton,
+            !enabled && styles.disabledAddOrRemoveButton,
+          ]}
+          onPress={onPress}
+          hitSlop={12} // Allows the user to be slightly less precise when pressing
+          pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }} // Allows the user's finger to move a bit without deregistering the click
+          disabled={!enabled}
+        >
+          <Text style={styles.addOrRemoveButtonLabel}>{label}</Text>
+        </Pressable>
+      </View>
+    );
   }
 
   // Default theme
@@ -154,5 +171,24 @@ const styles = StyleSheet.create({
   },
   disabledNewGameButtonLabel: {
     opacity: 0.3,
+  },
+  addOrRemoveButtonView: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
+  },
+  disabledAddOrRemoveButton: {
+    opacity: 0.3,
+  },
+  addOrRemoveButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  addOrRemoveButtonLabel: {
+    fontSize: 20,
   },
 });

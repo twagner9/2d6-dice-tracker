@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import PlayerInput from "../PlayerInput";
 import Button from "./Button";
+import PlayerInput from "./PlayerInput";
 
 export default function PlayersScreen({
   updatePlayers,

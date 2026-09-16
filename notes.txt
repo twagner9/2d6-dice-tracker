@@ -17,3 +17,7 @@ into a device that actually runs the code.
 Command for building while plugged in: eas build --platform android --profile preview
 Installed eas with `npm install --global eas-cli`, then executed `eas login` and `eas configure`. Had to create an account with EAS in order
 to use the service, but used firefox relay to at least not give out my email.
+
+To build with multiple threads:
+`cd android`
+`./gradlew assembleDebug --parallel --max-workers=8`

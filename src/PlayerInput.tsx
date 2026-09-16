@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 type PlayerProps = {
   playerNumber: number;
 };
 
-export default function PlayerInput({ playerNumber }: PlayerProps) {
+export default function PlayerInput({
+  playerNumber,
+  onNameChange,
+}: {
+  playerNumber: number;
+  onNameChange: (playerNumber: number, newName: string) => void;
+}) {
   const [name, setName] = useState<string>("");
+
+  useEffect(() => {
+    onNameChange(playerNumber, name);
+  }, [name]);
 
   /**
    * There can be a variable number of the players. This means I have to consider how to handle getting this component
@@ -22,7 +32,7 @@ export default function PlayerInput({ playerNumber }: PlayerProps) {
     <View style={style.labelAndInputArea}>
       <View style={style.playerView}>
         <Text style={style.playerLabel}>{`Player ${playerNumber}:`}</Text>
-        <TextInput style={style.playerInput}></TextInput>
+        <TextInput onChangeText={setName} style={style.playerInput}></TextInput>
       </View>
     </View>
   );
@@ -49,5 +59,6 @@ const style = StyleSheet.create({
     width: "auto",
     flex: 1,
     color: "black",
+    fontSize: 18,
   },
 });

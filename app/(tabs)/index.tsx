@@ -16,22 +16,43 @@ export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [newGameButtonActive, setNewGameButtonActive] =
     useState<boolean>(false);
-  const [players, setPlayers] = useState<string[]>([]);
+  const MIN_PLAYERS = 3;
+  const MAX_PLAYERS = 6;
+  const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
+  const [players, setPlayers] = useState<string[]>(Array(numPlayers).fill(""));
 
+  // Update the new game button based on the number of players available
   useEffect(() => {
-    if (players.length >= 3 && players.length <= 6) {
-      setNewGameButtonActive(true);
-    } else {
-      setNewGameButtonActive(false);
-    }
+    // .every will search every name in players and check that it meets the condition
+    setNewGameButtonActive(players.every((name) => name && name.trim() !== ""));
   }, [players]);
+
+  const updatePlayersList = (playerNumber: number, newName: string) => {
+    setPlayers((current) => {
+      const updated = [...current];
+      updated[playerNumber - 1] = newName;
+      return updated;
+    });
+  };
+
+  function changeNumPlayers(shouldIncrease: boolean) {
+    if (shouldIncrease) {
+      if (numPlayers < MAX_PLAYERS) {
+        setNumPlayers(numPlayers + 1);
+      }
+    } else {
+      if (numPlayers > MIN_PLAYERS) {
+        setNumPlayers(numPlayers - 1);
+      }
+    }
+  }
 
   function startGameClick() {
     // TODO: execute the logic for creating a new match
     // 1. pull the entered players and ensure there are valid strings in
     // each input, and that the length of the array
 
-    if (players.length < 3 || players.length > 6) {
+    if (numPlayers < MIN_PLAYERS || numPlayers > MAX_PLAYERS) {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
     }
@@ -64,7 +85,11 @@ export default function Index() {
           ) : (
             // {/* TODO: add the player input logic here */}
             <View>
-              <PlayersScreen />
+              <PlayersScreen
+                updatePlayers={updatePlayersList}
+                changeNumPlayers={changeNumPlayers}
+                numPlayers={numPlayers}
+              />
               <Button
                 label={"Start Game"}
                 theme={"new game"}

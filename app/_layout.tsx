@@ -7,14 +7,11 @@ import { SQLiteProvider } from "expo-sqlite";
 export default function RootLayout() {
   return (
     <>
-      <SQLiteProvider
-        databaseName="CatanTracker.db"
-        onInit={initDatabase}
-        children={undefined}
-      ></SQLiteProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+      <SQLiteProvider databaseName="CatanTracker.db" onInit={initDatabase}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </SQLiteProvider>
     </>
   );
 }

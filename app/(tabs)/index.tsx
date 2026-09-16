@@ -1,6 +1,8 @@
 import Button from "@/src/components/Button";
 import PlayersScreen from "@/src/components/PlayersScreen";
 import RollTrackerList from "@/src/components/RollTrackerList";
+import { addPlayers } from "@/src/db/queries/players";
+import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -20,6 +22,7 @@ export default function Index() {
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
   const [players, setPlayers] = useState<string[]>(Array(numPlayers).fill(""));
+  const db = useSQLiteContext();
 
   // Update the new game button based on the number of players available
   useEffect(() => {
@@ -62,7 +65,22 @@ export default function Index() {
         return;
       }
     }
-    // TODO: check that the
+
+    // TODO: now that the proper number of players are available and the names for each
+    // player are valid, check the names in the database. If any are found, list the players and prompt
+    // the user to specify if these are returning players, and say that if they are not, they should be more
+    // specific on the names in question to differentiate between players.
+
+    // NOTE: async functions require using .then() syntax to access values returned from them,
+    // because they are in Promise form otherwise
+    addPlayers(db, players).then((potentialReturningPlayers: string[]) => {
+      if (potentialReturningPlayers.length > 0) {
+        // TODO: dialog or alert should appear with focus and ask the user if names
+        // in this list are returning players or not. If not, return before starting game
+        // and tell the user to modify the names to differentiate.
+      }
+    });
+
     setGameStarted(true);
   }
   return (

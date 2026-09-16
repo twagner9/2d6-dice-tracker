@@ -18,6 +18,8 @@ export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [newGameButtonActive, setNewGameButtonActive] =
     useState<boolean>(false);
+  const [showNameConfirmDialog, setShowNameConfirmDialog] =
+    useState<boolean>(false);
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
@@ -78,6 +80,7 @@ export default function Index() {
         // TODO: dialog or alert should appear with focus and ask the user if names
         // in this list are returning players or not. If not, return before starting game
         // and tell the user to modify the names to differentiate.
+        setShowNameConfirmDialog(true);
       }
     });
 

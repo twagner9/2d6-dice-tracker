@@ -1,7 +1,9 @@
 import Button from "@/src/components/Button";
+import ConfirmNameDialog from "@/src/components/ConfirmNamesModal";
 import PlayersScreen from "@/src/components/PlayersScreen";
 import RollTrackerList from "@/src/components/RollTrackerList";
-import { addPlayers } from "@/src/db/queries/players";
+import { createNewMatch } from "@/src/db/queries/matches";
+import { addPlayers, checkForExistingPlayers } from "@/src/db/queries/players";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import {
@@ -18,12 +20,15 @@ export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [newGameButtonActive, setNewGameButtonActive] =
     useState<boolean>(false);
-  const [showNameConfirmDialog, setShowNameConfirmDialog] =
+  const [showNameConfirmDialog, setShowNameConfirmModal] =
     useState<boolean>(false);
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
   const [players, setPlayers] = useState<string[]>(Array(numPlayers).fill(""));
+  const [possibleReturningPlayers, setPossibleReturningPlayers] = useState<
+    string[]
+  >([]);
   const db = useSQLiteContext();
 
   // Update the new game button based on the number of players available
@@ -53,10 +58,6 @@ export default function Index() {
   }
 
   function startGameClick() {
-    // TODO: execute the logic for creating a new match
-    // 1. pull the entered players and ensure there are valid strings in
-    // each input, and that the length of the array
-
     if (numPlayers < MIN_PLAYERS || numPlayers > MAX_PLAYERS) {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
@@ -68,24 +69,39 @@ export default function Index() {
       }
     }
 
-    // TODO: now that the proper number of players are available and the names for each
-    // player are valid, check the names in the database. If any are found, list the players and prompt
-    // the user to specify if these are returning players, and say that if they are not, they should be more
-    // specific on the names in question to differentiate between players.
-
     // NOTE: async functions require using .then() syntax to access values returned from them,
     // because they are in Promise form otherwise
-    addPlayers(db, players).then((potentialReturningPlayers: string[]) => {
-      if (potentialReturningPlayers.length > 0) {
-        // TODO: dialog or alert should appear with focus and ask the user if names
-        // in this list are returning players or not. If not, return before starting game
-        // and tell the user to modify the names to differentiate.
-        setShowNameConfirmDialog(true);
-      }
-    });
-
-    setGameStarted(true);
+    checkForExistingPlayers(db, players).then(
+      (potentialReturningPlayers: string[]) => {
+        if (potentialReturningPlayers.length > 0) {
+          setPossibleReturningPlayers(potentialReturningPlayers);
+          setShowNameConfirmModal(true);
+        } else {
+          addPlayers(db, players);
+        }
+      },
+    );
   }
+
+  const startGame = () => {
+    setShowNameConfirmModal(false);
+    if (possibleReturningPlayers.length !== players.length) {
+      addPlayers(
+        db,
+        players.filter((player) => !possibleReturningPlayers.includes(player)),
+      );
+    }
+    createNewMatch(db);
+    setGameStarted(true);
+  };
+  const onGameFinished = () => {
+    // TODO: save the game -- will want to have boolean state that will specify if there has been a new game pushed to the database.
+    // This way, it doesn't require querying the database every single time the history tab is clicked, but only the first time the app
+    // is loaded or when there is an update
+    // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
+    // Answer: need to keep the match ID AND all player IDs
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -101,7 +117,7 @@ export default function Index() {
           <Text style={styles.beginGameText}>Track a New Game</Text>
           {gameStarted ? (
             <View style={styles.diceTrackerContainer}>
-              <RollTrackerList />
+              <RollTrackerList finishGame={onGameFinished} />
             </View>
           ) : (
             // {/* TODO: add the player input logic here */}
@@ -118,6 +134,13 @@ export default function Index() {
                 enabled={newGameButtonActive}
               />
             </View>
+          )}
+          {showNameConfirmDialog && (
+            <ConfirmNameDialog
+              players={possibleReturningPlayers}
+              shouldShowModal={setShowNameConfirmModal}
+              startGame={startGame}
+            />
           )}
         </ScrollView>
       </KeyboardAvoidingView>

@@ -5,12 +5,16 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-export default function RollTrackerList() {
+export default function RollTrackerList({
+  finishGame,
+}: {
+  finishGame: () => void;
+}) {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
-    new Array(11).fill(0)
+    new Array(11).fill(0),
   );
   const [percentageValues, setPercentageValues] = useState<Array<number>>(
-    new Array(11).fill(0)
+    new Array(11).fill(0),
   );
   const [totalNumRolls, setTotalNumRolls] = useState<number>(0);
   const [showClearAllModal, setShowClearAllModal] = useState<boolean>(false);
@@ -31,7 +35,7 @@ export default function RollTrackerList() {
     if (id === null) return;
 
     const updatedRolls = rollCountValues.map((v, i) =>
-      i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v
+      i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v,
     );
 
     setRollCountValues(updatedRolls);
@@ -51,8 +55,8 @@ export default function RollTrackerList() {
   useEffect(() => {
     setPercentageValues(
       rollCountValues.map((v) =>
-        totalNumRolls === 0 ? 0 : (v / totalNumRolls) * 100
-      )
+        totalNumRolls === 0 ? 0 : (v / totalNumRolls) * 100,
+      ),
     );
   }, [totalNumRolls]);
 
@@ -85,10 +89,17 @@ export default function RollTrackerList() {
               label="Clear"
               onPress={() => setShowClearAllModal(true)}
               theme={"clear"}
+              enabled={true}
             />
             <ConfirmClearModal
               isVisible={showClearAllModal}
               onResponse={clearAllCurrentRolls}
+            />
+            <Button
+              label="Finish Game"
+              onPress={() => finishGame}
+              theme={"clear"}
+              enabled={true}
             />
           </View>
         </View>

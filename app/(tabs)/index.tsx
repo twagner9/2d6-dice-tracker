@@ -35,6 +35,7 @@ export default function Index() {
   useEffect(() => {
     // .every will search every name in players and check that it meets the condition
     setNewGameButtonActive(players.every((name) => name && name.trim() !== ""));
+    setNumPlayers(players.length);
   }, [players]);
 
   const updatePlayersList = (playerNumber: number, newName: string) => {
@@ -48,11 +49,11 @@ export default function Index() {
   function changeNumPlayers(shouldIncrease: boolean) {
     if (shouldIncrease) {
       if (numPlayers < MAX_PLAYERS) {
-        setNumPlayers(numPlayers + 1);
+        setPlayers((previousPlayers) => [...previousPlayers, ""]);
       }
     } else {
       if (numPlayers > MIN_PLAYERS) {
-        setNumPlayers(numPlayers - 1);
+        setPlayers((players) => players.slice(0, -1));
       }
     }
   }
@@ -71,16 +72,16 @@ export default function Index() {
 
     // NOTE: async functions require using .then() syntax to access values returned from them,
     // because they are in Promise form otherwise
-    checkForExistingPlayers(db, players).then(
-      (potentialReturningPlayers: string[]) => {
+    checkForExistingPlayers(db, players)
+      .then((potentialReturningPlayers: string[]) => {
         if (potentialReturningPlayers.length > 0) {
           setPossibleReturningPlayers(potentialReturningPlayers);
           setShowNameConfirmModal(true);
         } else {
-          addPlayers(db, players);
+          startGame();
         }
-      },
-    );
+      })
+      .catch((error) => console.error(error));
   }
 
   const startGame = () => {

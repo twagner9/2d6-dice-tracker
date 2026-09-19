@@ -54,6 +54,7 @@ export default function Button({
             !enabled && styles.disabledNewGameButtonLabel,
           ]}
           onPress={onPress}
+          hitSlop={30}
         >
           <Text style={styles.newGameLabel}>{label}</Text>
         </Pressable>
@@ -145,8 +146,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   newGameButtonContainer: {
-    width: 120,
-    height: 35,
+    width: 130,
+    height: 50,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

@@ -1,94 +1,54 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 
 type Props = {
   label: string;
-  theme?: string;
+  slopValue?: number;
   onPress?: () => void;
-  enabled: boolean;
+  enabled?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
+  buttonStyle?: StyleProp<ViewStyle>;
+  labelStyle?: StyleProp<TextStyle>;
 };
 
 // For now this is pulled from the demo project; really this component will probably have its scope limited to the
 export default function Button({
   label,
-  theme,
+  slopValue,
   onPress,
   enabled = true,
+  containerStyle,
+  buttonStyle,
+  labelStyle,
 }: Props) {
   // Theme for the primary button; by passing the theme as a prop, it will automatically
   // style the button based on the selected theme, passed from the actual location that
   // the button will be used. Good for making buttons with a variety of themes (will need
   // for the catan app).
-  if (theme === "primary") {
-    return (
-      <View
-        style={[
-          styles.buttonContainer,
-          { borderWidth: 4, borderColor: "#ffd33d", borderRadius: 18 },
-        ]}
-      >
-        <Pressable
-          style={[styles.button, { backgroundColor: "#fff" }]}
-          onPress={onPress}
-        >
-          <Text style={[styles.buttonLabel, { color: "#25292e" }]}>
-            {label}
-          </Text>
-        </Pressable>
-      </View>
-    );
-  } else if (theme === "clear") {
-    return (
-      <View style={[styles.clearButtonContainer]}>
-        <Pressable style={styles.clearButton} onPress={onPress}>
-          <Text style={styles.clearButtonLabel}>{label}</Text>
-        </Pressable>
-      </View>
-    );
-  } else if (theme == "new game") {
-    return (
-      <View style={[styles.newGameButtonContainer]}>
-        <Pressable
-          disabled={!enabled}
-          style={[
-            styles.newGameButton,
-            !enabled && styles.disabledNewGameButtonLabel,
-          ]}
-          onPress={onPress}
-          hitSlop={30}
-        >
-          <Text style={styles.newGameLabel}>{label}</Text>
-        </Pressable>
-      </View>
-    );
-  } else if (theme == "addOrRemove") {
-    return (
-      <View style={[styles.addOrRemoveButtonView, { backgroundColor: "#fff" }]}>
-        <Pressable
-          style={[
-            styles.addOrRemoveButton,
-            !enabled && styles.disabledAddOrRemoveButton,
-          ]}
-          onPress={onPress}
-          hitSlop={12} // Allows the user to be slightly less precise when pressing
-          pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }} // Allows the user's finger to move a bit without deregistering the click
-          disabled={!enabled}
-        >
-          <Text style={styles.addOrRemoveButtonLabel}>{label}</Text>
-        </Pressable>
-      </View>
-    );
-  }
 
   // Default theme
   return (
-    <View style={[styles.buttonContainer, { backgroundColor: "#fff" }]}>
+    <View
+      style={[
+        styles.buttonContainer,
+        containerStyle,
+        { backgroundColor: "#fff" },
+      ]}
+    >
       <Pressable
-        style={styles.button}
+        style={[styles.button, !enabled && styles.disabledButton, buttonStyle]}
         onPress={onPress}
-        hitSlop={12} // Allows the user to be slightly less precise when pressing
+        hitSlop={slopValue}
         pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }} // Allows the user's finger to move a bit without deregistering the click
       >
-        <Text style={styles.buttonLabel}>{label}</Text>
+        <Text style={[styles.buttonLabel, labelStyle]}>{label}</Text>
       </Pressable>
     </View>
   );
@@ -96,9 +56,6 @@ export default function Button({
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: 25,
-    height: 25,
-    marginHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
@@ -106,8 +63,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   button: {
-    width: "100%",
-    height: "100%",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -115,81 +70,8 @@ const styles = StyleSheet.create({
   buttonLabel: {
     alignItems: "center",
     justifyContent: "center",
-    fontSize: 16,
   },
-  buttonIcon: {
-    paddingRight: 8,
-  },
-  clearButtonContainer: {
-    width: 80,
-    height: 30,
-    marginHorizontal: 20,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-    borderRadius: 3,
-    borderColor: "#78b2bcff",
-    borderWidth: 2,
-  },
-  clearButton: {
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 75,
-    height: 60,
-  },
-  clearButtonLabel: {
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-    fontSize: 24,
-  },
-  newGameButtonContainer: {
-    width: 130,
-    height: 50,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    padding: 5,
-    borderRadius: 3,
-    borderColor: "#78b2bcff",
-    borderWidth: 2,
-  },
-  newGameButton: {
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    // width: 75,
-    // height: 60,
-  },
-  newGameLabel: {
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-    fontSize: 18,
-  },
-  disabledNewGameButtonLabel: {
+  disabledButton: {
     opacity: 0.3,
-  },
-  addOrRemoveButtonView: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "#78b2bcff",
-    borderWidth: 2,
-  },
-  disabledAddOrRemoveButton: {
-    opacity: 0.3,
-  },
-  addOrRemoveButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  addOrRemoveButtonLabel: {
-    fontSize: 20,
   },
 });

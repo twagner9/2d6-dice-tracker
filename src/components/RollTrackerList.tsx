@@ -84,12 +84,15 @@ export default function RollTrackerList({
         ))}
         <View>
           <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>
-          <View style={styles.clearButtonContainer}>
+          <View style={styles.clearButtonView}>
             <Button
               label="Clear"
               onPress={() => setShowClearAllModal(true)}
-              theme={"clear"}
+              slopValue={20}
               enabled={true}
+              containerStyle={styles.clearButtonContainer}
+              buttonStyle={styles.clearButton}
+              labelStyle={styles.clearButtonLabel}
             />
             <ConfirmClearModal
               isVisible={showClearAllModal}
@@ -98,8 +101,11 @@ export default function RollTrackerList({
             <Button
               label="Finish Game"
               onPress={() => finishGame}
-              theme={"clear"}
               enabled={true}
+              containerStyle={styles.finishButtonContainer}
+              buttonStyle={styles.finishButton}
+              labelStyle={styles.finishLabel}
+              slopValue={20}
             />
           </View>
         </View>
@@ -135,9 +141,45 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#fff",
   },
-  clearButtonContainer: {
+  clearButtonView: {
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
   },
+
+  // ------------------ FOR BUTTON COMPONENT STYLING -------------------------------
+  clearButtonContainer: {
+    // width: 80,
+    // height: 30,
+    marginHorizontal: 20,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 5,
+    borderRadius: 3,
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
+  },
+  clearButton: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 120,
+    height: 25,
+  },
+  clearButtonLabel: {
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  finishButtonContainer: { marginTop: 15 },
+  finishButton: {
+    width: 120,
+    height: 30,
+  },
+  finishLabel: {
+    fontSize: 20,
+  },
+  // ------------------ FOR BUTTON COMPONENT STYLING -------------------------------
 });

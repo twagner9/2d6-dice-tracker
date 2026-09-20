@@ -33,13 +33,6 @@ export default function PlayersScreen({
     updatePlayers(playerNumber, newName);
   };
 
-  // TODO: add a check for the contents of each input area to verify that each player name has been filled in
-  // Right now, it's probably easiest to manually check each PlayerInput and if they all have content, load them into the players,
-  // which is state that should be passed from index.tsx when rendering the component. Then, it can start to handle the backend logic
-  // of either using an existing player or creating a new player.
-  // The goal is ultimately to avoid having a "save" button that must be pressed, instead opting to have it automatically detect
-  // that all inputs are valid before enabling the Start Game button.
-
   return (
     <View style={styles.playersScreenView}>
       {Array.from({ length: numPlayers }, (_, index) => {
@@ -56,13 +49,17 @@ export default function PlayersScreen({
           label={"Remove"}
           onPress={() => changeNumPlayers(false)}
           enabled={removeEnabled}
-          theme={"addOrRemove"}
+          containerStyle={styles.addOrRemoveButtonView}
+          buttonStyle={styles.addOrRemoveButton}
+          labelStyle={styles.addOrRemoveButtonLabel}
         />
         <Button
           label={"Add"}
           onPress={() => changeNumPlayers(true)}
           enabled={addEnabled}
-          theme={"addOrRemove"}
+          containerStyle={styles.addOrRemoveButtonView}
+          buttonStyle={styles.addOrRemoveButton}
+          labelStyle={styles.addOrRemoveButtonLabel}
         />
       </View>
     </View>
@@ -78,5 +75,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
+  },
+  addOrRemoveButtonView: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
+  },
+  addOrRemoveButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 100,
+  },
+  addOrRemoveButtonLabel: {
+    fontSize: 20,
   },
 });

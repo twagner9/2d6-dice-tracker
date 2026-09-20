@@ -36,19 +36,13 @@ export default function ConfirmNameDialog({
                 </Text>
               </View>
             </View>
-            <View style={styles.confirmButtonsView}>
+            <View style={styles.buttonsView}>
               <Button
-                theme="new game"
                 label={"Cancel"}
                 onPress={() => shouldShowModal(false)}
                 enabled={true}
               />
-              <Button
-                theme="new game"
-                label={"Proceed"}
-                onPress={startGame}
-                enabled={true}
-              />
+              <Button label={"Proceed"} onPress={startGame} enabled={true} />
             </View>
           </View>
         </View>
@@ -81,15 +75,18 @@ const styles = StyleSheet.create({
   explanationView: {
     alignContent: "center",
   },
-  confirmButtonsView: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    paddingTop: 15,
-  },
   modalText: {
     color: "white",
     textAlign: "center",
     fontSize: 20,
   },
+  buttonsView: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    paddingTop: 15,
+  },
+  buttonCompStyle: {},
+  buttonStyle: {},
+  buttonLabelStyle: {},
 });

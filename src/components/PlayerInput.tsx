@@ -46,6 +46,7 @@ const style = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    marginHorizontal: 18,
   },
   playerLabel: {
     color: "white",

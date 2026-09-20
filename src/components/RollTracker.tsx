@@ -7,7 +7,7 @@ type Props = {
   percentage: string;
   updateTotalRollsState: (
     operation: "inc" | "dec" | "clear",
-    id: number
+    id: number,
   ) => void;
 };
 
@@ -29,9 +29,23 @@ export default function RollTracker({
   return (
     <View style={styles.rollCounterContainer}>
       <Text style={styles.labelText}>{diceValue}: </Text>
-      <Button label="-" onPress={decrementCount} />
+      <Button
+        label="-"
+        onPress={decrementCount}
+        enabled={true}
+        containerStyle={styles.incrementDecrementButtonsView}
+        buttonStyle={styles.incrementDecrementButtons}
+        slopValue={12}
+      />
       <Text style={styles.pressText}>{totalRolls}</Text>
-      <Button label="+" onPress={incrementCount} />
+      <Button
+        label="+"
+        onPress={incrementCount}
+        enabled={true}
+        containerStyle={styles.incrementDecrementButtonsView}
+        buttonStyle={styles.incrementDecrementButtons}
+        slopValue={12}
+      />
       <Text style={[styles.percentageText, { paddingLeft: 5 }]}>
         {percentage + "%"}
       </Text>
@@ -40,7 +54,6 @@ export default function RollTracker({
 }
 
 const styles = StyleSheet.create({
-  fullContainer: {},
   rollCounterContainer: {
     flex: 1,
     flexDirection: "row",
@@ -68,5 +81,6 @@ const styles = StyleSheet.create({
     textAlign: "right",
     minWidth: 85,
   },
-  expectedProbabilityContainer: {},
+  incrementDecrementButtonsView: { marginBottom: 12 },
+  incrementDecrementButtons: { width: 30, height: 25 },
 });

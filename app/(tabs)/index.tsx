@@ -130,9 +130,11 @@ export default function Index() {
               />
               <Button
                 label={"Start Game"}
-                theme={"new game"}
                 onPress={startGameClick}
                 enabled={newGameButtonActive}
+                containerStyle={styles.newGameButtonContainer}
+                buttonStyle={styles.newGameButton}
+                labelStyle={styles.newGameLabel}
               />
             </View>
           )}
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#25292e",
     textAlign: "center",
-    alignItems: "center",
+    // alignItems: "center",
   },
   text: {
     fontSize: 20,
@@ -175,9 +177,37 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   scrollContainer: {
-    flex: 1,
+    flexGrow: 1,
+    width: "100%",
   },
   scrollContent: {
     paddingBottom: 125,
+  },
+
+  // ------------------ FOR BUTTON COMPONENT STYLING -------------------------------
+  newGameButtonContainer: {
+    width: 130,
+    height: 50,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    padding: 5,
+    borderRadius: 3,
+    borderColor: "#78b2bcff",
+    borderWidth: 2,
+  },
+  newGameButton: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    // width: 75,
+    // height: 60,
+  },
+  newGameLabel: {
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    fontSize: 18,
   },
 });

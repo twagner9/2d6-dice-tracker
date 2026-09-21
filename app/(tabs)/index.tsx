@@ -16,6 +16,13 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+export type Player = {
+  id: number;
+  name: string;
+};
+
+export type NewPlayer = {};
+
 export default function Index() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [newGameButtonActive, setNewGameButtonActive] =
@@ -25,7 +32,9 @@ export default function Index() {
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
-  const [players, setPlayers] = useState<string[]>(Array(numPlayers).fill(""));
+  const [players, setPlayers] = useState<Player[]>(
+    Array(numPlayers).fill({ name: "", id: -1 }),
+  );
   const [possibleReturningPlayers, setPossibleReturningPlayers] = useState<
     string[]
   >([]);
@@ -34,14 +43,16 @@ export default function Index() {
   // Update the new game button based on the number of players available
   useEffect(() => {
     // .every will search every name in players and check that it meets the condition
-    setNewGameButtonActive(players.every((name) => name && name.trim() !== ""));
+    setNewGameButtonActive(
+      players.every((player) => player.name && player.name.trim() !== ""),
+    );
     setNumPlayers(players.length);
   }, [players]);
 
   const updatePlayersList = (playerNumber: number, newName: string) => {
     setPlayers((current) => {
       const updated = [...current];
-      updated[playerNumber - 1] = newName;
+      updated[playerNumber - 1].name = newName;
       return updated;
     });
   };
@@ -49,7 +60,10 @@ export default function Index() {
   function changeNumPlayers(shouldIncrease: boolean) {
     if (shouldIncrease) {
       if (numPlayers < MAX_PLAYERS) {
-        setPlayers((previousPlayers) => [...previousPlayers, ""]);
+        setPlayers((previousPlayers) => [
+          ...previousPlayers,
+          { name: "", id: -1 },
+        ]);
       }
     } else {
       if (numPlayers > MIN_PLAYERS) {
@@ -63,8 +77,8 @@ export default function Index() {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
     }
-    for (const name of players) {
-      if (!name || name.trim() === "") {
+    for (const player of players) {
+      if (!player.name || player.name.trim() === "") {
         alert("Name cannot be empty. Ensure all name fields have content.");
         return;
       }
@@ -73,9 +87,13 @@ export default function Index() {
     // NOTE: async functions require using .then() syntax to access values returned from them,
     // because they are in Promise form otherwise
     checkForExistingPlayers(db, players)
-      .then((potentialReturningPlayers: string[]) => {
+      .then((potentialReturningPlayers: Player[]) => {
         if (potentialReturningPlayers.length > 0) {
-          setPossibleReturningPlayers(potentialReturningPlayers);
+          let names = [];
+          for (const player of players) {
+            names.push(player.name);
+          }
+          setPossibleReturningPlayers(names);
           setShowNameConfirmModal(true);
         } else {
           startGame();
@@ -89,9 +107,12 @@ export default function Index() {
     if (possibleReturningPlayers.length !== players.length) {
       addPlayers(
         db,
-        players.filter((player) => !possibleReturningPlayers.includes(player)),
+        players.filter(
+          (player) => !possibleReturningPlayers.includes(player.name),
+        ),
       );
     }
+    checkForExistingPlayers(db, players).then();
     createNewMatch(db);
     setGameStarted(true);
   };

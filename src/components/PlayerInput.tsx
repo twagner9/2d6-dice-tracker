@@ -54,12 +54,13 @@ const style = StyleSheet.create({
     marginRight: 20,
   },
   playerInput: {
-    borderColor: "#bcf5f5",
+    borderColor: "#ffd33d",
+    backgroundColor: "#7590b32e",
+    borderRadius: 8,
     borderWidth: 2,
-    backgroundColor: "#fff",
     width: "auto",
     flex: 1,
-    color: "black",
     fontSize: 18,
+    color: "white",
   },
 });

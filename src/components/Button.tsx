@@ -35,13 +35,7 @@ export default function Button({
 
   // Default theme
   return (
-    <View
-      style={[
-        styles.buttonContainer,
-        containerStyle,
-        { backgroundColor: "#fff" },
-      ]}
-    >
+    <View style={[styles.buttonContainer, containerStyle]}>
       <Pressable
         style={[styles.button, !enabled && styles.disabledButton, buttonStyle]}
         onPress={onPress}
@@ -59,8 +53,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
-    borderColor: "#78b2bcff",
-    borderWidth: 2,
+    borderRadius: 8,
+    borderWidth: 3,
+    borderColor: "#ffd33d",
+    backgroundColor: "#7590b32e",
   },
   button: {
     alignItems: "center",
@@ -70,6 +66,7 @@ const styles = StyleSheet.create({
   buttonLabel: {
     alignItems: "center",
     justifyContent: "center",
+    color: "white",
   },
   disabledButton: {
     opacity: 0.3,

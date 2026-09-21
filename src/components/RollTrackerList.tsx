@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
     borderRadius: 3,
-    borderColor: "#78b2bcff",
     borderWidth: 2,
   },
   clearButton: {

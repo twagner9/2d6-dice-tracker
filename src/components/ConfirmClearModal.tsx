@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     backgroundColor: "#e7e4e4ff",
-    borderColor: "#78b2bcff",
     borderWidth: 2,
   },
 });

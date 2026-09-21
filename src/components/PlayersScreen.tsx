@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   addOrRemoveButtonView: {
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "#78b2bcff",
     borderWidth: 2,
   },
   addOrRemoveButton: {

@@ -12,7 +12,7 @@ export default function ConfirmNameDialog({
 }) {
   return (
     <>
-      <Modal>
+      <Modal animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalView}>
             <View style={styles.displayExistingNamesView}>
@@ -41,8 +41,18 @@ export default function ConfirmNameDialog({
                 label={"Cancel"}
                 onPress={() => shouldShowModal(false)}
                 enabled={true}
+                buttonStyle={styles.buttonStyle}
+                labelStyle={styles.buttonLabelStyle}
+                slopValue={15}
               />
-              <Button label={"Proceed"} onPress={startGame} enabled={true} />
+              <Button
+                label={"Proceed"}
+                onPress={startGame}
+                enabled={true}
+                buttonStyle={styles.buttonStyle}
+                labelStyle={styles.buttonLabelStyle}
+                slopValue={15}
+              />
             </View>
           </View>
         </View>
@@ -57,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0, 0.9)",
+    backgroundColor: "rgba(0,0,0, 0.75)",
   },
   modalView: {
     flex: 1,
@@ -86,7 +96,11 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingTop: 15,
   },
-  buttonCompStyle: {},
-  buttonStyle: {},
-  buttonLabelStyle: {},
+  buttonStyle: {
+    width: 100,
+    height: 30,
+  },
+  buttonLabelStyle: {
+    fontSize: 20,
+  },
 });

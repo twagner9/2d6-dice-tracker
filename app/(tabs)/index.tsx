@@ -2,8 +2,10 @@ import Button from "@/src/components/Button";
 import ConfirmNameDialog from "@/src/components/ConfirmNamesModal";
 import PlayersScreen from "@/src/components/PlayersScreen";
 import RollTrackerList from "@/src/components/RollTrackerList";
+import { saveMatch } from "@/src/db/queries/match_players";
 import { createNewMatch } from "@/src/db/queries/matches";
 import { addPlayers, checkForExistingPlayers } from "@/src/db/queries/players";
+import { saveRolls } from "@/src/db/queries/rolls";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import {
@@ -29,6 +31,8 @@ export default function Index() {
     useState<boolean>(false);
   const [showNameConfirmDialog, setShowNameConfirmModal] =
     useState<boolean>(false);
+  const [showWinnerSelectionModal, setShowWinnerSelectionModal] =
+    useState<boolean>(false);
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
@@ -39,6 +43,9 @@ export default function Index() {
     string[]
   >([]);
   const db = useSQLiteContext();
+  const [matchId, setMatchId] = useState<number>(-1);
+  const [winningPlayerId, setWinningPlayerId] = useState<number>(-1);
+  const [pendingRolls, setPendingRolls] = useState<number[]>([]);
 
   // Update the new game button based on the number of players available
   useEffect(() => {
@@ -102,7 +109,7 @@ export default function Index() {
       .catch((error) => console.error(error));
   }
 
-  const startGame = () => {
+  const startGame = async () => {
     setShowNameConfirmModal(false);
     if (possibleReturningPlayers.length !== players.length) {
       addPlayers(
@@ -113,15 +120,29 @@ export default function Index() {
       );
     }
     checkForExistingPlayers(db, players).then();
-    createNewMatch(db);
+    setMatchId(await createNewMatch(db));
     setGameStarted(true);
   };
+
+  // WILL BE PASSED TO A MODAL THAT PROMPTS THE PLAYER TO SELECT THE WINNER
+  function getWinner(winnerId: number) {
+    setWinningPlayerId(winnerId);
+  }
+
+  const handleEndMatch = (rolls: number[]) => {
+    setPendingRolls(rolls);
+    setShowWinnerSelectionModal(true);
+  };
+
   const onGameFinished = () => {
     // TODO: save the game -- will want to have boolean state that will specify if there has been a new game pushed to the database.
     // This way, it doesn't require querying the database every single time the history tab is clicked, but only the first time the app
     // is loaded or when there is an update
     // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
     // Answer: need to keep the match ID AND all player IDs
+    console.log(matchId, players);
+    saveMatch(db, matchId, players, winningPlayerId);
+    saveRolls(db, matchId, pendingRolls);
   };
 
   return (

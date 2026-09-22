@@ -24,12 +24,9 @@ export async function getPlayerIds(
 export async function addPlayers(db: SQLite.SQLiteDatabase, players: Player[]) {
   // Do simple batch command
   const names = getNames(players);
-  const placedholders = names.map(() => "(?)").join(", ");
+  const placeholders = names.map(() => "(?)").join(", ");
 
-  await db.runAsync(
-    `INSERT INTO players (name) VALUES ${placedholders}`,
-    names,
-  );
+  await db.runAsync(`INSERT INTO players (name) VALUES ${placeholders}`, names);
 }
 
 function getNames(players: Player[]) {

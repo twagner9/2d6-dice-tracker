@@ -5,7 +5,11 @@ import RollTrackerList from "@/src/components/RollTrackerList";
 import SelectWinnerModal from "@/src/components/SelectWinnerModal";
 import { saveMatch } from "@/src/db/queries/match_players";
 import { createNewMatch } from "@/src/db/queries/matches";
-import { addPlayers, checkForExistingPlayers } from "@/src/db/queries/players";
+import {
+  addPlayers,
+  checkForExistingPlayers,
+  getPlayerIds,
+} from "@/src/db/queries/players";
 import { saveRolls } from "@/src/db/queries/rolls";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
@@ -109,20 +113,22 @@ export default function Index() {
   const startGame = async () => {
     setShowNameConfirmModal(false);
     if (possibleReturningPlayers.length !== playerNames.length) {
-      addPlayers(
+      await addPlayers(
         db,
         playerNames.filter((name) => !possibleReturningPlayers.includes(name)),
       );
     }
-    checkForExistingPlayers(db, playerNames).then();
+    const ids = await getPlayerIds(db, playerNames);
+    setPlayerIds(ids);
     setMatchId(await createNewMatch(db));
     setGameStarted(true);
   };
 
   // WILL BE PASSED TO A MODAL THAT PROMPTS THE PLAYER TO SELECT THE WINNER
-  function getWinner(winnerId: number) {
+  async function getWinner(winnerId: number) {
     console.log(winnerId);
     setWinningPlayerId(winnerId);
+    gameFinished();
   }
 
   const handleEndMatch = (rolls: number[]) => {
@@ -130,13 +136,18 @@ export default function Index() {
     setShowWinnerSelectionModal(true);
   };
 
-  const onGameFinished = () => {
+  const beginEndGameSequence = (showFinalModal: boolean) => {
+    setShowWinnerSelectionModal(showFinalModal);
+  };
+
+  const gameFinished = () => {
     // TODO: save the game -- will want to have boolean state that will specify if there has been a new game pushed to the database.
     // This way, it doesn't require querying the database every single time the history tab is clicked, but only the first time the app
     // is loaded or when there is an update
     // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
     // Answer: need to keep the match ID AND all player IDs
     console.log(matchId, playerNames, playerIds, pendingRolls);
+    setShowWinnerSelectionModal(true);
     saveMatch(db, matchId, playerIds, winningPlayerId);
     saveRolls(db, matchId, pendingRolls);
   };
@@ -156,10 +167,9 @@ export default function Index() {
           <Text style={styles.beginGameText}>Track a New Game</Text>
           {gameStarted ? (
             <View style={styles.diceTrackerContainer}>
-              <RollTrackerList finishGame={onGameFinished} />
+              <RollTrackerList finishGame={beginEndGameSequence} />
             </View>
           ) : (
-            // {/* TODO: add the player input logic here */}
             <View>
               <PlayersScreen
                 updatePlayers={updatePlayersList}
@@ -184,13 +194,16 @@ export default function Index() {
               startGame={startGame}
             />
           )}
-          <View>
-            <SelectWinnerModal
-              getWinner={getWinner}
-              playerIds={[1, 2, 3]}
-              playerNames={["test1", "test2", "test3"]}
-            />
-          </View>
+          {showWinnerSelectionModal && (
+            <View>
+              <SelectWinnerModal
+                getWinner={getWinner}
+                setShowModal={setShowWinnerSelectionModal}
+                playerIds={playerIds}
+                playerNames={playerNames}
+              />
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -8,7 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RollTrackerList({
   finishGame,
 }: {
-  finishGame: () => void;
+  finishGame: (showFinalModal: boolean) => void;
 }) {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
     new Array(11).fill(0),
@@ -100,7 +100,7 @@ export default function RollTrackerList({
             />
             <Button
               label="Finish Game"
-              onPress={() => finishGame}
+              onPress={() => finishGame(true)}
               enabled={true}
               containerStyle={styles.finishButtonContainer}
               buttonStyle={styles.finishButton}
@@ -152,19 +152,15 @@ const styles = StyleSheet.create({
     // width: 80,
     // height: 30,
     marginHorizontal: 20,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 5,
-    borderRadius: 3,
-    borderWidth: 2,
   },
   clearButton: {
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     width: 120,
-    height: 25,
+    height: 30,
   },
   clearButtonLabel: {
     justifyContent: "center",

@@ -17,8 +17,16 @@ export async function checkForExistingPlayers(
 
 export async function getPlayerIds(
   db: SQLite.SQLiteDatabase,
-  players: Player[],
-) {}
+  players: string[],
+) {
+  const placeholders = players.map(() => "(?)").join(", ");
+  const rows = await db.getAllAsync<{ player_id: number }>(
+    `SELECT player_id FROM players WHERE name IN (${placeholders})`,
+    players,
+  );
+
+  return rows.map((r) => r.player_id);
+}
 
 export async function addPlayers(db: SQLite.SQLiteDatabase, players: string[]) {
   // Do simple batch command

@@ -6,10 +6,12 @@ import Button from "./Button";
 
 export default function SelectWinnerModal({
   getWinner,
+  setShowModal,
   playerNames,
   playerIds,
 }: {
   getWinner: (winnerId: number) => void;
+  setShowModal: (show: boolean) => void;
   playerNames: string[];
   playerIds: number[];
 }) {
@@ -59,6 +61,7 @@ export default function SelectWinnerModal({
           <View style={styles.buttonView}>
             <Button
               label={"Cancel"}
+              onPress={() => setShowModal(false)}
               enabled={true}
               buttonStyle={styles.bottomButtonStyle}
               labelStyle={styles.bottomButtonLabelStyle}

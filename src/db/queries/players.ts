@@ -3,17 +3,16 @@ import * as SQLite from "expo-sqlite";
 
 export async function checkForExistingPlayers(
   db: SQLite.SQLiteDatabase,
-  players: Player[],
-): Promise<Player[]> {
-  let names = getNames(players);
-  const placeholders = names.map(() => "(?)").join(", ");
+  players: string[],
+): Promise<string[]> {
+  const placeholders = players.map(() => "(?)").join(", ");
 
   const rows = await db.getAllAsync<{ id: number; name: string }>(
     `SELECT name FROM players WHERE name IN (${placeholders})`,
-    names,
+    players,
   );
 
-  return rows.map((r) => ({ name: r.name, id: r.id }));
+  return rows.map((r) => r.name);
 }
 
 export async function getPlayerIds(
@@ -21,12 +20,15 @@ export async function getPlayerIds(
   players: Player[],
 ) {}
 
-export async function addPlayers(db: SQLite.SQLiteDatabase, players: Player[]) {
+export async function addPlayers(db: SQLite.SQLiteDatabase, players: string[]) {
   // Do simple batch command
-  const names = getNames(players);
-  const placeholders = names.map(() => "(?)").join(", ");
+  const placeholders = players.map(() => "(?)").join(", ");
 
-  await db.runAsync(`INSERT INTO players (name) VALUES ${placeholders}`, names);
+  const rows = await db.runAsync(
+    `INSERT INTO players (name) VALUES ${placeholders}`,
+    players,
+  );
+  return rows.changes;
 }
 
 function getNames(players: Player[]) {

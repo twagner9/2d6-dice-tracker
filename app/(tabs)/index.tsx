@@ -2,6 +2,7 @@ import Button from "@/src/components/Button";
 import ConfirmNameDialog from "@/src/components/ConfirmNamesModal";
 import PlayersScreen from "@/src/components/PlayersScreen";
 import RollTrackerList from "@/src/components/RollTrackerList";
+import SelectWinnerModal from "@/src/components/SelectWinnerModal";
 import { saveMatch } from "@/src/db/queries/match_players";
 import { createNewMatch } from "@/src/db/queries/matches";
 import { addPlayers, checkForExistingPlayers } from "@/src/db/queries/players";
@@ -36,8 +37,11 @@ export default function Index() {
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 6;
   const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
-  const [players, setPlayers] = useState<Player[]>(
-    Array(numPlayers).fill({ name: "", id: -1 }),
+  const [playerNames, setPlayers] = useState<string[]>(
+    Array(numPlayers).fill(""),
+  );
+  const [playerIds, setPlayerIds] = useState<number[]>(
+    Array(numPlayers).fill(-1),
   );
   const [possibleReturningPlayers, setPossibleReturningPlayers] = useState<
     string[]
@@ -51,15 +55,15 @@ export default function Index() {
   useEffect(() => {
     // .every will search every name in players and check that it meets the condition
     setNewGameButtonActive(
-      players.every((player) => player.name && player.name.trim() !== ""),
+      playerNames.every((player) => player && player.trim() !== ""),
     );
-    setNumPlayers(players.length);
-  }, [players]);
+    setNumPlayers(playerNames.length);
+  }, [playerNames]);
 
   const updatePlayersList = (playerNumber: number, newName: string) => {
     setPlayers((current) => {
       const updated = [...current];
-      updated[playerNumber - 1].name = newName;
+      updated[playerNumber - 1] = newName;
       return updated;
     });
   };
@@ -67,10 +71,7 @@ export default function Index() {
   function changeNumPlayers(shouldIncrease: boolean) {
     if (shouldIncrease) {
       if (numPlayers < MAX_PLAYERS) {
-        setPlayers((previousPlayers) => [
-          ...previousPlayers,
-          { name: "", id: -1 },
-        ]);
+        setPlayers((previousPlayers) => [...previousPlayers, ""]);
       }
     } else {
       if (numPlayers > MIN_PLAYERS) {
@@ -84,8 +85,8 @@ export default function Index() {
       alert("Catan must have 3-6 players. Delete a player to continue.");
       return;
     }
-    for (const player of players) {
-      if (!player.name || player.name.trim() === "") {
+    for (const player of playerNames) {
+      if (!player || player.trim() === "") {
         alert("Name cannot be empty. Ensure all name fields have content.");
         return;
       }
@@ -93,14 +94,10 @@ export default function Index() {
 
     // NOTE: async functions require using .then() syntax to access values returned from them,
     // because they are in Promise form otherwise
-    checkForExistingPlayers(db, players)
-      .then((potentialReturningPlayers: Player[]) => {
+    checkForExistingPlayers(db, playerNames)
+      .then((potentialReturningPlayers: string[]) => {
         if (potentialReturningPlayers.length > 0) {
-          let names = [];
-          for (const player of players) {
-            names.push(player.name);
-          }
-          setPossibleReturningPlayers(names);
+          setPossibleReturningPlayers(potentialReturningPlayers);
           setShowNameConfirmModal(true);
         } else {
           startGame();
@@ -111,21 +108,20 @@ export default function Index() {
 
   const startGame = async () => {
     setShowNameConfirmModal(false);
-    if (possibleReturningPlayers.length !== players.length) {
+    if (possibleReturningPlayers.length !== playerNames.length) {
       addPlayers(
         db,
-        players.filter(
-          (player) => !possibleReturningPlayers.includes(player.name),
-        ),
+        playerNames.filter((name) => !possibleReturningPlayers.includes(name)),
       );
     }
-    checkForExistingPlayers(db, players).then();
+    checkForExistingPlayers(db, playerNames).then();
     setMatchId(await createNewMatch(db));
     setGameStarted(true);
   };
 
   // WILL BE PASSED TO A MODAL THAT PROMPTS THE PLAYER TO SELECT THE WINNER
   function getWinner(winnerId: number) {
+    console.log(winnerId);
     setWinningPlayerId(winnerId);
   }
 
@@ -140,8 +136,8 @@ export default function Index() {
     // is loaded or when there is an update
     // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
     // Answer: need to keep the match ID AND all player IDs
-    console.log(matchId, players);
-    saveMatch(db, matchId, players, winningPlayerId);
+    console.log(matchId, playerNames, playerIds, pendingRolls);
+    saveMatch(db, matchId, playerIds, winningPlayerId);
     saveRolls(db, matchId, pendingRolls);
   };
 
@@ -188,6 +184,13 @@ export default function Index() {
               startGame={startGame}
             />
           )}
+          <View>
+            <SelectWinnerModal
+              getWinner={getWinner}
+              playerIds={[1, 2, 3]}
+              playerNames={["test1", "test2", "test3"]}
+            />
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -8,7 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RollTrackerList({
   finishGame,
 }: {
-  finishGame: (showFinalModal: boolean) => void;
+  finishGame: (showFinalModal: boolean, rollCounts: number[]) => void;
 }) {
   const [rollCountValues, setRollCountValues] = useState<Array<number>>(
     new Array(11).fill(0),
@@ -100,7 +100,7 @@ export default function RollTrackerList({
             />
             <Button
               label="Finish Game"
-              onPress={() => finishGame(true)}
+              onPress={() => finishGame(true, rollCountValues)}
               enabled={true}
               containerStyle={styles.finishButtonContainer}
               buttonStyle={styles.finishButton}

@@ -5,12 +5,12 @@ import SelectDropdown from "react-native-select-dropdown";
 import Button from "./Button";
 
 export default function SelectWinnerModal({
-  getWinner,
+  finishGame,
   setShowModal,
   playerNames,
   playerIds,
 }: {
-  getWinner: (winnerId: number) => void;
+  finishGame: (winnerId: number) => void;
   setShowModal: (show: boolean) => void;
   playerNames: string[];
   playerIds: number[];
@@ -68,7 +68,7 @@ export default function SelectWinnerModal({
             />
             <Button
               label={"Finish"}
-              onPress={() => getWinner(selectedWinner)}
+              onPress={() => finishGame(selectedWinner)}
               enabled={true}
               buttonStyle={styles.bottomButtonStyle}
               labelStyle={styles.bottomButtonLabelStyle}
@@ -136,34 +136,3 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-
-/**
- * <SelectDropdown
-    data={emojisWithIcons}
-    onSelect={(selectedItem, index) => {
-      console.log(selectedItem, index);
-    }}
-    renderButton={(selectedItem, isOpened) => {
-      return (
-        <View style={styles.dropdownButtonStyle}>
-          {selectedItem && (
-            <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
-          )}
-          <Text style={styles.dropdownButtonTxtStyle}>
-            {(selectedItem && selectedItem.title) || 'Select your mood'}
-          </Text>
-          <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
-        </View>
-      );
-    }}
-    renderItem={(item, index, isSelected) => {
-      return (
-        <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
-          <Icon name={item.icon} style={styles.dropdownItemIconStyle} />
-          <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
-        </View>
-      );
-    }}
-    showsVerticalScrollIndicator={false}
-    dropdownStyle={styles.dropdownMenuStyle}
-  /> */

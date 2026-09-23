@@ -1,5 +1,22 @@
 import { StyleSheet, Text, View } from "react-native";
 
+export type MatchesTableData = {
+  id: number;
+  date: string;
+};
+
+export type MatchPlayersTableData = {
+  matchId: number;
+  playerId: number;
+  winner: boolean;
+};
+
+export type RollsTableData = {
+  matchId: number;
+  rollValue: string;
+  count: number;
+};
+
 export default function HistoryRecord(props: {
   matchId: number;
   date: Date;
@@ -62,8 +79,6 @@ export default function HistoryRecord(props: {
   );
 }
 
-// TODO: Why are the rolls columns expanding above the Rolls: text?
-// How do I top align the content in each column?
 const styles = StyleSheet.create({
   recordView: {
     borderWidth: 1,

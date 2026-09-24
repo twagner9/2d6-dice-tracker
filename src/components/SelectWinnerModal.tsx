@@ -69,7 +69,7 @@ export default function SelectWinnerModal({
             <Button
               label={"Finish"}
               onPress={() => finishGame(selectedWinner)}
-              enabled={true}
+              enabled={selectedWinner === -1 ? false : true}
               buttonStyle={styles.bottomButtonStyle}
               labelStyle={styles.bottomButtonLabelStyle}
             />

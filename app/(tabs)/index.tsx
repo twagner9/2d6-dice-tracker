@@ -137,15 +137,16 @@ export default function Index() {
     // is loaded or when there is an update
     // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
     // Answer: need to keep the match ID AND all player IDs
+    console.log(`gameFinished winnerId: ${winnerId}`);
+    saveMatch(db, matchId, playerIds, winnerId);
+    saveRolls(db, matchId, pendingRolls);
     setShowWinnerSelectionModal(false);
+
     setPendingRolls(pendingRolls.slice(0, 0));
     setNumPlayers(MIN_PLAYERS);
     setPlayerIds(Array(MIN_PLAYERS).fill(-1));
     setPlayerNames(Array(MIN_PLAYERS).fill(""));
     setGameStarted(false);
-
-    saveMatch(db, matchId, playerIds, winnerId);
-    saveRolls(db, matchId, pendingRolls);
   };
 
   return (

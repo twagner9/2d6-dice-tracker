@@ -1,25 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export type MatchesTableData = {
-  id: number;
-  date: string;
-};
-
-export type MatchPlayersTableData = {
-  matchId: number;
-  playerId: number;
-  winner: boolean;
-};
-
-export type RollsTableData = {
-  matchId: number;
-  rollValue: string;
-  count: number;
-};
-
 export default function HistoryRecord(props: {
   matchId: number;
-  date: Date;
+  date: string;
   players: string[];
   winner: string;
   rolls: number[];
@@ -31,9 +14,7 @@ export default function HistoryRecord(props: {
           <Text
             style={styles.recordText}
           >{`Match ID: ${props.matchId.toString()}`}</Text>
-          <Text
-            style={styles.dateText}
-          >{`Date: ${props.date.toLocaleString()}`}</Text>
+          <Text style={styles.dateText}>{`Date: ${props.date}`}</Text>
         </View>
         <View style={styles.playersView}>
           <Text style={styles.recordText}>{"Players:"}</Text>
@@ -88,7 +69,11 @@ const styles = StyleSheet.create({
     width: "85%",
     alignSelf: "center",
   },
-  genInfoView: { flexDirection: "row", alignItems: "center" },
+  genInfoView: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   playersView: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -105,7 +90,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   dateText: {
-    textAlign: "right",
     color: "#fff",
     padding: 5,
   },

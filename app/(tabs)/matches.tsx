@@ -1,7 +1,17 @@
 import HistoryRecord from "@/src/components/HistoryRecord";
+import { getRecentMatches } from "@/src/db/queries/matches";
+import { FontAwesome } from "@expo/vector-icons";
+import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
+
+export type RecentMatchesResult = {
+  id: number;
+  date: string;
+  players: { playerId: number; name: string; winner: boolean }[];
+  rolls: { rollValue: string; count: number }[];
+};
 
 /**
  * Plan:
@@ -17,81 +27,142 @@ import SelectDropdown from "react-native-select-dropdown";
  */
 
 export default function MatchesScreen() {
-  const [numberOfRecords, setNumberOfRecords] = useState<number>(5);
+  const [numberOfRecords, setNumberOfRecords] = useState<number>(3);
   const [order, setOrder] = useState<string>("Most recent");
+  const [matchData, setMatchData] = useState<RecentMatchesResult[]>([]);
 
   const numRecordsOptions = ["3", "5", "10", "15", "20"];
   const sortOptions = ["Oldest", "Most recent"];
 
+  const db = useSQLiteContext();
   /**
    * Each update to the number of records, which should come from a SelectDropdown, requires pulling fresh data
    * from the database to fill the appropriate number of records.
    */
   useEffect(() => {
-    // TODO: each time this updated, the database should be re-queried to pull the appropriate number of records
+    if (!db) return;
+    loadQueryData();
   }, [numberOfRecords]);
 
   /**
    * Each update to the order must also cause a fresh DB query.
    */
   useEffect(() => {
-    // TODO: call the same function used by the hook for the number of records
+    if (!db) return;
+    loadQueryData();
   }, [order]);
+
+  /**
+   * Calls database function for retrieving data and then unpacks the data before utilizing it to load into the list of HistoryRecord objects
+   */
+  async function loadQueryData() {
+    if (!db) return;
+    try {
+      setMatchData(await getRecentMatches(db, numberOfRecords, order));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.headingText}>
         <Text style={styles.matchHistoryText}>{"Match History"}</Text>
-        <SelectDropdown
-          data={numRecordsOptions}
-          onSelect={(selectedNumber: number) =>
-            setNumberOfRecords(selectedNumber)
-          }
-          renderButton={/*TODO*/}
-          renderItem={/*TODO*/}
-        />
-        <SelectDropdown
-          data={sortOptions}
-          onSelect={(selectedOrder: string) => setOrder(selectedOrder)}
-          renderButton={/*TODO*/}
-          renderItem={/*TODO*/}
-        />
       </View>
-      {/* TODO: Make this spawn based on the total number of matches stored from the database */}
+      <View style={styles.selectionsView}>
+        <View style={styles.dropdownView}>
+          <SelectDropdown
+            data={numRecordsOptions}
+            onSelect={(selectedNumber: string) =>
+              setNumberOfRecords(parseInt(selectedNumber))
+            }
+            defaultValue={numRecordsOptions[0]}
+            renderButton={(selectedNumber, isOpened) => {
+              return (
+                <View
+                  style={{ ...styles.dropdownButtonStyle, ...{ width: 80 } }}
+                >
+                  {
+                    <Text style={styles.dropdownNameText}>
+                      {selectedNumber}
+                    </Text>
+                  }
+                  <FontAwesome
+                    name={isOpened ? "chevron-up" : "chevron-down"}
+                    size={16}
+                    color={"#fff"}
+                    style={{}}
+                  />
+                </View>
+              );
+            }}
+            renderItem={(item, index, isSelected) => {
+              return (
+                <View
+                  style={{
+                    ...styles.dropdownItemStyle,
+                    ...(isSelected && { backgroundColor: "#47576c" }),
+                  }}
+                >
+                  <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                </View>
+              );
+            }}
+          />
+        </View>
+        <View style={styles.dropdownView}>
+          <SelectDropdown
+            data={sortOptions}
+            onSelect={(selectedOrder: string) => setOrder(selectedOrder)}
+            defaultValue={sortOptions[1]}
+            renderButton={(selectedOrder, isOpened) => {
+              return (
+                <View style={styles.dropdownButtonStyle}>
+                  {<Text style={styles.dropdownNameText}>{selectedOrder}</Text>}
+                  <FontAwesome
+                    name={isOpened ? "chevron-up" : "chevron-down"}
+                    size={16}
+                    color={"#fff"}
+                    style={{}}
+                  />
+                </View>
+              );
+            }}
+            renderItem={(item, index, isSelected) => {
+              return (
+                <View
+                  style={{
+                    ...styles.dropdownItemStyle,
+                    ...(isSelected && { backgroundColor: "#47576c" }),
+                  }}
+                >
+                  <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                </View>
+              );
+            }}
+          />
+        </View>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.matchScroller}
       >
-        {}
-        <HistoryRecord
-          matchId={1}
-          date={new Date()}
-          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
-          winner={"John"}
-          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-        />
-        <HistoryRecord
-          matchId={1}
-          date={new Date()}
-          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
-          winner={"John"}
-          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-        />
-        <HistoryRecord
-          matchId={1}
-          date={new Date()}
-          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
-          winner={"John"}
-          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-        />
-        <HistoryRecord
-          matchId={1}
-          date={new Date()}
-          players={["John", "Sarah", "Michael", "Olivia", "Joshua", "Emilio"]}
-          winner={"John"}
-          rolls={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-        />
+        {matchData.map((match) => {
+          return (
+            <HistoryRecord
+              key={match.id}
+              matchId={match.id}
+              date={match.date}
+              players={match.players.map((p) => p.name)}
+              rolls={match.rolls.map((r) => r.count)}
+              winner={
+                match.players.find((player) => player.winner)?.name ??
+                "No winner"
+              }
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -115,8 +186,54 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 24,
   },
-  // TODO: make put padding between its children
+
   matchScroller: {
     width: "100%",
+  },
+
+  selectionsView: {
+    width: "85%",
+    alignContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  dropdownView: {
+    borderRadius: 8,
+    borderWidth: 3,
+    borderColor: "#ffd33d",
+    backgroundColor: "#7590b32e",
+    justifyContent: "space-between",
+  },
+  dropdownNameText: {
+    color: "#fff",
+    fontSize: 22,
+    flex: 1,
+  },
+  dropdownButtonStyle: {
+    width: 160,
+    height: 50,
+    backgroundColor: "#7590b32e",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 8,
+  },
+  dropdownButtonTextStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#fff",
+  },
+  dropdownItemStyle: {
+    width: "100%",
+    flexDirection: "row",
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    backgroundColor: "#293341",
+  },
+  dropdownItemTxtStyle: {
+    color: "#fff",
+    fontSize: 18,
   },
 });

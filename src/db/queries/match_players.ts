@@ -16,7 +16,7 @@ export async function saveMatch(
   const values = playerIds.flatMap((id) => [
     matchId,
     id,
-    id === winner ? 1 : 0,
+    id === winner ? true : false,
   ]);
 
   const result = await db.runAsync(

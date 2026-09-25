@@ -1,3 +1,4 @@
+import { AppProvider } from "@/context/AppContext";
 import { initDatabase } from "@/src/db/schema";
 import { Stack } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
@@ -7,11 +8,13 @@ import { SQLiteProvider } from "expo-sqlite";
 export default function RootLayout() {
   return (
     <>
-      <SQLiteProvider databaseName="CatanTracker.db" onInit={initDatabase}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </SQLiteProvider>
+      <AppProvider>
+        <SQLiteProvider databaseName="CatanTracker.db" onInit={initDatabase}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </SQLiteProvider>
+      </AppProvider>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { useAppContext } from "@/context/AppContext";
 import HistoryRecord from "@/src/components/HistoryRecord";
 import { getRecentMatches } from "@/src/db/queries/matches";
 import { FontAwesome } from "@expo/vector-icons";
@@ -30,6 +31,7 @@ export default function MatchesScreen() {
   const [numberOfRecords, setNumberOfRecords] = useState<number>(3);
   const [order, setOrder] = useState<string>("Most recent");
   const [matchData, setMatchData] = useState<RecentMatchesResult[]>([]);
+  const { refreshHistoryData, setRefreshHistoryData } = useAppContext();
 
   const numRecordsOptions = ["3", "5", "10", "15", "20"];
   const sortOptions = ["Oldest", "Most recent"];
@@ -51,6 +53,14 @@ export default function MatchesScreen() {
     if (!db) return;
     loadQueryData();
   }, [order]);
+
+  useEffect(() => {
+    if (refreshHistoryData) {
+      if (!db) return;
+      loadQueryData();
+      setRefreshHistoryData(false);
+    }
+  }, [refreshHistoryData]);
 
   /**
    * Calls database function for retrieving data and then unpacks the data before utilizing it to load into the list of HistoryRecord objects

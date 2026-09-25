@@ -1,3 +1,4 @@
+import { useAppContext } from "@/context/AppContext";
 import Button from "@/src/components/Button";
 import ConfirmNameDialog from "@/src/components/ConfirmNamesModal";
 import PlayersScreen from "@/src/components/PlayersScreen";
@@ -53,6 +54,7 @@ export default function Index() {
   const db = useSQLiteContext();
   const [matchId, setMatchId] = useState<number>(-1);
   const [pendingRolls, setPendingRolls] = useState<number[]>([]);
+  const { setRefreshHistoryData } = useAppContext();
 
   // Update the new game button based on the number of players available
   useEffect(() => {
@@ -147,6 +149,7 @@ export default function Index() {
     setPlayerIds(Array(MIN_PLAYERS).fill(-1));
     setPlayerNames(Array(MIN_PLAYERS).fill(""));
     setGameStarted(false);
+    setRefreshHistoryData(true);
   };
 
   return (

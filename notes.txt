@@ -21,3 +21,8 @@ to use the service, but used firefox relay to at least not give out my email.
 To build with multiple threads:
 `cd android`
 `./gradlew assembleDebug --parallel --max-workers=8`
+
+
+For installing locally (persistent):
+`npx expo run:android --variant release`
+

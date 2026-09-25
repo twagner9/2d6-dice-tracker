@@ -1,8 +1,9 @@
 import Button from "@/src/components/Button";
 import ConfirmClearModal from "@/src/components/ConfirmClearModal";
 import RollTracker from "@/src/components/RollTracker";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RollTrackerList({
@@ -23,23 +24,32 @@ export default function RollTrackerList({
    *
    * @param operation The operation that is specified by the button that was clicked.
    * @param id The ID of the RollTracker whose diceValue should be updated.
+   *
+   * NOTE: Memoizing requires that all props must be reference-stable (i.e., always refer to the
+   * same object) across renders, otherwise it saves nothing. Adding this useCallback with an
+   * empty dependency array prevents the function from changing, ensuring that each render will
+   * always use the original state array when updating, rather than using the original state
+   * of the state array (which was [0,0,0...]).
    */
-  function updateRolls(operation: "inc" | "dec" | "clear", id: number) {
-    if (operation === "clear") {
-      setRollCountValues(rollCountValues.map(() => 0));
-      // setTotalNumRolls(0);
-      return;
-    }
+  const updateRolls = useCallback(
+    (operation: "inc" | "dec" | "clear", id: number) => {
+      if (operation === "clear") {
+        setRollCountValues((prev) => prev.map(() => 0));
+        // setTotalNumRolls(0);
+        return;
+      }
 
-    // Bad ID; do nothing
-    if (id === null) return;
+      // Bad ID; do nothing
+      if (id === null) return;
 
-    const updatedRolls = rollCountValues.map((v, i) =>
-      i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v,
-    );
-
-    setRollCountValues(updatedRolls);
-  }
+      setRollCountValues((prev) =>
+        prev.map((v, i) =>
+          i + 2 === id ? (operation === "inc" ? v + 1 : Math.max(0, v - 1)) : v,
+        ),
+      );
+    },
+    [],
+  );
 
   // Remember: useEffect is very useful when some state is dependent on another state;
   // it allows an update to the dependent state to be applied each time an update
@@ -73,14 +83,19 @@ export default function RollTrackerList({
     <SafeAreaProvider style={styles.safeArea}>
       <View style={styles.diceTrackerContainer}>
         {rollCountValues.map((v, i) => (
-          <RollTracker
+          <Animated.View
             key={i}
-            diceValue={i + 2}
-            totalRolls={v}
-            // percentage={percentageValues[i]}
-            percentage={percentageValues[i].toFixed(2)}
-            updateTotalRollsState={updateRolls}
-          />
+            entering={FadeInDown.duration(300).delay(i * 30)}
+          >
+            <RollTracker
+              key={i}
+              diceValue={i + 2}
+              totalRolls={v}
+              // percentage={percentageValues[i]}
+              percentage={percentageValues[i].toFixed(2)}
+              updateTotalRollsState={updateRolls}
+            />
+          </Animated.View>
         ))}
         <View>
           <Text style={styles.totalText}>{"Rolls: " + totalNumRolls}</Text>

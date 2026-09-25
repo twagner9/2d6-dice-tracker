@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "catan-tracker",
-    "slug": "catan-tracker",
+    "name": "Catan Tracker",
+    "slug": "Catan Tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

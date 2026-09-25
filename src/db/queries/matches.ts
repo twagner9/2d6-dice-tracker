@@ -3,7 +3,14 @@ import * as SQLite from "expo-sqlite";
 
 export async function createNewMatch(db: SQLite.SQLiteDatabase) {
   const curDate = new Date();
-  const formattedDate = `${curDate.getMonth()}-${curDate.getDay()}-${curDate.getFullYear()} ${curDate.getHours() > 12 ? curDate.getHours() - 12 : curDate.getHours()}:${curDate.getMinutes()} ${curDate.getHours() >= 12 ? "PM" : "AM"}`;
+  const year = curDate.getFullYear();
+  const month = curDate.getMonth();
+  const day = curDate.getDay();
+  const hour = curDate.getHours();
+  const minute = curDate.getMinutes();
+  const minutes = curDate.getMinutes();
+
+  const formattedDate = `${month}-${day}-${year} ${hour > 12 ? hour - 12 : hour}:${minute < 10 ? `0${minute}` : minute} ${hour >= 12 ? "PM" : "AM"}`;
   const result = db.runAsync(`INSERT INTO matches (played_at) VALUES(?);`, [
     formattedDate,
   ]);

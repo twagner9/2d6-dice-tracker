@@ -1,4 +1,5 @@
 import Button from "@/src/components/Button";
+import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
   ) => void;
 };
 
-export default function RollTracker({
+const RollTracker = memo(function RollTracker({
   diceValue,
   totalRolls,
   percentage,
@@ -51,7 +52,7 @@ export default function RollTracker({
       </Text>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   rollCounterContainer: {
@@ -84,3 +85,5 @@ const styles = StyleSheet.create({
   incrementDecrementButtonsView: { marginBottom: 12 },
   incrementDecrementButtons: { width: 30, height: 25 },
 });
+
+export default RollTracker;

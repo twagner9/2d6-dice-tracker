@@ -22,6 +22,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export type Player = {
@@ -139,7 +140,6 @@ export default function Index() {
     // is loaded or when there is an update
     // Match created, players inserted; now we finished the game. So, who won? How will match_players be filled?
     // Answer: need to keep the match ID AND all player IDs
-    console.log(`gameFinished winnerId: ${winnerId}`);
     saveMatch(db, matchId, playerIds, winnerId);
     saveRolls(db, matchId, pendingRolls);
     setShowWinnerSelectionModal(false);
@@ -166,11 +166,20 @@ export default function Index() {
         >
           <Text style={styles.beginGameText}>Track a New Game</Text>
           {gameStarted ? (
-            <View style={styles.diceTrackerContainer}>
+            <Animated.View
+              key="roll-tracker"
+              entering={FadeIn.duration(250)}
+              exiting={FadeOut.duration(100)}
+              style={styles.diceTrackerContainer}
+            >
               <RollTrackerList finishGame={beginEndGameSequence} />
-            </View>
+            </Animated.View>
           ) : (
-            <View>
+            <Animated.View
+              key="player-input"
+              entering={FadeIn.duration(500)}
+              exiting={FadeOut.duration(100)}
+            >
               <PlayersScreen
                 updatePlayers={updatePlayersList}
                 changeNumPlayers={changeNumPlayers}
@@ -185,7 +194,7 @@ export default function Index() {
                 labelStyle={styles.newGameLabel}
                 slopValue={20}
               />
-            </View>
+            </Animated.View>
           )}
           {showNameConfirmDialog && (
             <ConfirmNameDialog

@@ -5,6 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import SelectDropdown from "react-native-select-dropdown";
 
 export type RecentMatchesResult = {
@@ -158,19 +159,24 @@ export default function MatchesScreen() {
         showsHorizontalScrollIndicator={false}
         style={styles.matchScroller}
       >
-        {matchData.map((match) => {
+        {matchData.map((match, index) => {
           return (
-            <HistoryRecord
+            <Animated.View
               key={match.id}
-              matchId={match.id}
-              date={match.date}
-              players={match.players.map((p) => p.name)}
-              rolls={match.rolls.map((r) => r.count)}
-              winner={
-                match.players.find((player) => player.winner)?.name ??
-                "No winner"
-              }
-            />
+              entering={FadeInDown.duration(300).delay(index * 30)}
+            >
+              <HistoryRecord
+                key={match.id}
+                matchId={match.id}
+                date={match.date}
+                players={match.players.map((p) => p.name)}
+                rolls={match.rolls.map((r) => r.count)}
+                winner={
+                  match.players.find((player) => player.winner)?.name ??
+                  "No winner"
+                }
+              />
+            </Animated.View>
           );
         })}
       </ScrollView>

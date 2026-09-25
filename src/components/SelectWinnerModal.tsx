@@ -19,7 +19,7 @@ export default function SelectWinnerModal({
 
   return (
     <>
-      <Modal>
+      <Modal animationType="fade">
         <View style={styles.modalView}>
           <View style={styles.dropdownView}>
             <SelectDropdown
